@@ -1,0 +1,33 @@
+/* normalize */
+body {
+  margin: 0;
+  padding: 0;
+  color: #2e3b3d;
+  background: #c5e0e9;
+}
+p {
+  margin: 0;
+  padding: 1em 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* page layout */
+.row {
+  width: 960px;
+  margin: 0 auto;
+}
+
+/* Scenes */
+#game {
+  width: 960px;
+  height: 480px;
+  margin: 0 auto;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: #fcf1c1;
+}
