@@ -1,0 +1,70 @@
+#game {
+  position: relative;
+  width: 300px;
+  height: 480px;
+  border: 1px solid black;
+}
+
+canvas {
+  background: #333 url(../images/bg.png);
+  position: absolute;
+}
+
+#control-box {
+  width: 100%;
+  overflow: auto;
+  position: absolute;
+  bottom: 0;
+}
+
+.control {
+  display: block;
+  float: left;
+  width: 50px;
+  height: 50px;
+  background: gray url(../images/input_button.png);
+  text-decoration: none;
+  color: #600643;
+  /* center align */
+  text-align: center;
+  /* vertical align */
+  line-height: 50px;
+  font-size: 24px;
+  font-family: impact;
+}
+
+.control:active {
+  background: white url(../images/input_button_hover.png);
+  color: #b52279;
+}
+
+/* Game over scene */
+#game-over {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+}
+/* Visibility controlling */
+.show {
+  display: block;
+}
+.hide {
+  display: none;
+}
+
+#replay-btn {
+  background: url(../images/replay.png);
+  display: block;
+  width: 100px;
+  height: 60px;
+  margin: auto;
+  position: relative;
+  top: 200px;
+}
+#replay-btn:hover {
+  background: url(../images/replay_hover.png);
+}
+#replay-btn:active {
+  background: url(../images/replay_active.png);
+}
