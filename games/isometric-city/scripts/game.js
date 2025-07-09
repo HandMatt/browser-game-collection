@@ -463,7 +463,18 @@ var createjs = createjs || {};
       game.dispatchEvent("newBuildingToBePlaced");
     };
     UILayer.prototype.popDiamond = function (building) {
-      game.diamonds += 1;
+      var diamond = new game.Diamond();
+
+      var screenCoord = game.isoMaths.isoToScreenCoord(building.x, building.y);
+      // transform the screen coordinate of city layer to UI layer.
+      var globalScreenCoord = game.cityLayer.localToLocal(
+        screenCoord.x,
+        screenCoord.y,
+        this
+      );
+      diamond.x = globalScreenCoord.x;
+      diamond.y = globalScreenCoord.y;
+      this.addChild(diamond);
     };
 
     return UILayer;
@@ -478,7 +489,7 @@ var createjs = createjs || {};
     game.stage = new cjs.Stage(game.canvas);
     game.stage.enableMouseOver();
 
-    game.coins = 100;
+    game.coins = 1000;
     game.diamonds = 0;
     game.powerSupply = 100;
     game.population = 0;
@@ -506,6 +517,11 @@ var createjs = createjs || {};
       game.cityGrowing.tick.bind(game.cityGrowing)
     );
     cjs.Ticker.addEventListener("tick", game.tick);
+
+    game.on("clickedDiamond", function () {
+      console.log("event fired");
+      game.diamonds += 1;
+    });
   };
 
   game.calculateBuildingsEffects = function () {

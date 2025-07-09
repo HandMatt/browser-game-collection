@@ -47,4 +47,23 @@ var createjs = createjs || {};
     this.regX = 0;
     this.regY = 74;
   }).prototype = Object.create(game.Tile.prototype);
+
+  (game.Diamond = function () {
+    cjs.Container.call(this); // super
+    var data = {
+      framerate: 16,
+      images: ["images/diamond-spritesheet.png"],
+      frames: { width: 90, height: 90 },
+    };
+    var spritesheet = new cjs.SpriteSheet(data);
+    var diamondSprite = new cjs.Sprite(spritesheet);
+    diamondSprite.gotoAndPlay(0);
+    diamondSprite.scaleX = diamondSprite.scaleY = 0.5;
+    this.addChild(diamondSprite);
+
+    this.on("click", function () {
+      game.dispatchEvent("clickedDiamond");
+      this.parent.removeChild(this);
+    });
+  }).prototype = Object.create(cjs.Container.prototype);
 }).call(this, game, createjs);
