@@ -18,9 +18,33 @@ var createjs = createjs || {};
     this.name = viewClassName;
     this.x = isoX;
     this.y = isoY;
+    this.isConstructionDone = false;
+    this.currentStep = 1;
+    this.stepsSeconds = game.BuildingsData[viewClassName].stepsSeconds;
+    this.buildTime = new Date().getTime();
   };
 
   game.buildingsList = [];
+
+  var cityGrowing = (game.cityGrowing = {});
+  cityGrowing.tick = function () {
+    for (var i = 0, len = game.buildingsList.length; i < len; i++) {
+      var building = game.buildingsList[i];
+
+      // is construction in the next stage?
+      var secondsDiff =
+        Math.floor(new Date().getTime() - building.buildTime) / 1000; // seconds
+      for (var j = 0, length = building.stepsSeconds.length; j < length; j++) {
+        // loop the steps
+        if (secondsDiff >= building.stepsSeconds[j]) {
+          building.currentStep = j + 2;
+          if (building.currentStep > length) {
+            building.isConstructionDone = true;
+          }
+        }
+      }
+    }
+  };
 }).call(this, game, createjs);
 
 // Layers
@@ -201,8 +225,10 @@ var createjs = createjs || {};
       // construct the 2D map data with building list.
       for (var i = 0, len = game.buildingsList.length; i < len; i++) {
         var b = game.buildingsList[i];
-
         var className = b.name;
+        if (!b.isConstructionDone) {
+          className = "ConstructionStep" + b.currentStep;
+        }
 
         newDataMap[b.y][b.x] = className;
       }
@@ -463,6 +489,14 @@ var createjs = createjs || {};
     cjs.Ticker.framerate = 40;
     cjs.Ticker.addEventListener("tick", game.stage); // add game.stage to ticker make the stage.update call automatically
     cjs.Ticker.addEventListener("tick", game.uiLayer.tick.bind(game.uiLayer));
+    cjs.Ticker.addEventListener(
+      "tick",
+      game.cityLayer.redraw.bind(game.cityLayer)
+    );
+    cjs.Ticker.addEventListener(
+      "tick",
+      game.cityGrowing.tick.bind(game.cityGrowing)
+    );
   };
 }).call(this, game, createjs);
 

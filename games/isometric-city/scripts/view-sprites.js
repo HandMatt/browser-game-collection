@@ -35,4 +35,16 @@ var createjs = createjs || {};
     this.regX = 0;
     this.regY = 51;
   }).prototype = Object.create(game.Tile.prototype);
+
+  (game.ConstructionStep1 = function () {
+    game.Tile.call(this, "images/construction-step1.png");
+    this.regX = 0;
+    this.regY = 51;
+  }).prototype = Object.create(game.Tile.prototype);
+
+  (game.ConstructionStep2 = function () {
+    game.Tile.call(this, "images/construction-step2.png");
+    this.regX = 0;
+    this.regY = 74;
+  }).prototype = Object.create(game.Tile.prototype);
 }).call(this, game, createjs);
