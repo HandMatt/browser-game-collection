@@ -15,3 +15,24 @@ var createjs = createjs || {};
   Tile.height = 43;
   game.Tile = Tile;
 }).call(this, game, createjs);
+
+// Buildings View
+(function (game, cjs) {
+  (game.CoinsGenerator = function () {
+    game.Tile.call(this, "images/coins-generator.png");
+    this.regX = 0;
+    this.regY = 94;
+  }).prototype = Object.create(game.Tile.prototype);
+
+  (game.Merchant = function () {
+    game.Tile.call(this, "images/merchant.png");
+    this.regX = 0;
+    this.regY = 43;
+  }).prototype = Object.create(game.Tile.prototype);
+
+  (game.PowerSupply = function () {
+    game.Tile.call(this, "images/power-supply.png");
+    this.regX = 0;
+    this.regY = 51;
+  }).prototype = Object.create(game.Tile.prototype);
+}).call(this, game, createjs);

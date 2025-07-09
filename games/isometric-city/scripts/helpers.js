@@ -27,3 +27,26 @@ var createjs = createjs || {};
     return button;
   };
 }).call(this, game, createjs);
+
+// ISO <-> Screen conversion.
+(function (game, cjs) {
+  game.isoMaths = {
+    screenToIsoCoord: function (screenX, screenY) {
+      var ix = Math.floor(
+        (screenY * game.Tile.width + screenX * game.Tile.height) /
+          (game.Tile.width * game.Tile.height)
+      );
+      var iy =
+        Math.floor(
+          (screenY * game.Tile.width - screenX * game.Tile.height) /
+            (game.Tile.width * game.Tile.height)
+        ) + 1;
+      return { x: ix, y: iy };
+    },
+    isoToScreenCoord: function (isoX, isoY) {
+      var sx = ((isoX - isoY) * game.Tile.width) / 2;
+      var sy = ((isoX + isoY) * game.Tile.height) / 2;
+      return new cjs.Point(sx, sy);
+    },
+  };
+}).call(this, game, createjs);

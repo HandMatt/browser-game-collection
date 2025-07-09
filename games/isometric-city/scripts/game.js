@@ -11,6 +11,18 @@ var createjs = createjs || {};
   };
 }).call(this, game);
 
+// Buildings Growing
+(function (game, cjs) {
+  // params sample: 2, 3, "Building"
+  game.Building = function (isoX, isoY, viewClassName) {
+    this.name = viewClassName;
+    this.x = isoX;
+    this.y = isoY;
+  };
+
+  game.buildingsList = [];
+}).call(this, game, createjs);
+
 // Layers
 (function (game, cjs) {
   var Layer = (function () {
@@ -72,7 +84,11 @@ var createjs = createjs || {};
       // By default it is false.
       game.isCreatingNewBuilding = false;
 
-      this.cols = this.rows = 9; // 9x9 map.
+      this.cols = 9;
+      this.rows = 9; // 9x9 map.
+
+      // 2D array that holds the type of building in string
+      this.data = game.helper.create2DArray(this.rows, this.cols);
 
       // tiles container to contain all Tile instance.
       this.tiles = new cjs.Container();
@@ -87,22 +103,142 @@ var createjs = createjs || {};
         game.setting.gameHeight / 2 - ((this.rows - 1) * game.Tile.height) / 2;
 
       this.redraw(); // create that visual of the city.
+
+      this.setupMouseInteraction();
     }
     CityLayer.prototype = Object.create(Layer.prototype);
+    CityLayer.prototype.setupMouseInteraction = function () {
+      // a ghost building
+      var ghostBuilding = new game.CoinsGenerator();
+      ghostBuilding.alpha = 0.5;
+      ghostBuilding.visible = false;
+      this.addChild(ghostBuilding);
+
+      // change ghost building visual based on the building choice.
+      var _this = this;
+      game.on("newBuildingToBePlaced", function () {
+        _this.removeChild(ghostBuilding);
+
+        ghostBuilding = new game[game.buildingTypeToBePlaced]();
+        ghostBuilding.alpha = 0.5;
+        ghostBuilding.visible = false;
+        _this.addChild(ghostBuilding);
+      });
+
+      function showGhostBuilding(x, y) {
+        ghostBuilding.visible = true;
+
+        // from screen cursor to city layer local x/y
+        var localPt = _this.globalToLocal(x, y);
+        // from screen's x/y of city layer to isometric x/y.
+        var isoCoord = game.isoMaths.screenToIsoCoord(localPt.x, localPt.y);
+        // back from iso x/y to screen x/y (get tile x/y).
+        // in order to get the screen x/y at tile reg point.
+        var tileScreenCoord = game.isoMaths.isoToScreenCoord(
+          isoCoord.x,
+          isoCoord.y
+        );
+        ghostBuilding.x = tileScreenCoord.x;
+        ghostBuilding.y = tileScreenCoord.y;
+        ghostBuilding.filters = [];
+        var isTileAvailable =
+          _this.data[isoCoord.y] &&
+          _this.data[isoCoord.y][isoCoord.x] === "Tile";
+        if (!isTileAvailable) {
+          // overlay a red colour by using filter
+          ghostBuilding.filters = [
+            new cjs.ColorFilter(1, 0, 0, 1), // red
+          ];
+        }
+        ghostBuilding.cache(0, 0, 100, 100); // we need to cache the Display Object as bitmap for the red filter.
+      }
+
+      // mouse move on city layer
+      game.stage.on("stagemousemove", function (e) {
+        // mousemove happens all the time, and if we are not creating ghost buildings is invisible
+        if (!game.isCreatingNewBuilding) {
+          ghostBuilding.visible = false;
+          return;
+        }
+
+        showGhostBuilding(e.stageX, e.stageY);
+      });
+
+      this.on("click", function (e) {
+        var localPt = this.globalToLocal(e.stageX, e.stageY);
+        var isoCoord = game.isoMaths.screenToIsoCoord(localPt.x, localPt.y);
+        var isTileAvailable =
+          this.data[isoCoord.y] && this.data[isoCoord.y][isoCoord.x] === "Tile";
+        if (game.isCreatingNewBuilding && isTileAvailable) {
+          var needCoins =
+            game.BuildingsData[game.buildingTypeToBePlaced].needCoins;
+          game.coins -= needCoins;
+
+          var event = new cjs.Event("placedBuilding");
+          event.buildingType = game.buildingTypeToBePlaced;
+          game.dispatchEvent(event); // trigger the event
+
+          game.isCreatingNewBuilding = false;
+          ghostBuilding.visible = false;
+
+          var newBuildingData = new game.Building(
+            isoCoord.x,
+            isoCoord.y,
+            event.buildingType
+          );
+
+          game.buildingsList.push(newBuildingData);
+
+          // redraw the city tiles and buildings after changes.
+          this.redraw();
+        }
+      });
+    };
+
     CityLayer.prototype.redraw = function () {
+      var newDataMap = game.helper.create2DArray(this.rows, this.cols, "Tile");
+
+      // construct the 2D map data with building list.
+      for (var i = 0, len = game.buildingsList.length; i < len; i++) {
+        var b = game.buildingsList[i];
+
+        var className = b.name;
+
+        newDataMap[b.y][b.x] = className;
+      }
+
       // loop the 2D array for visualisation.
       for (var i = 0; i < this.rows; i++) {
         for (var j = 0; j < this.cols; j++) {
-          var tile = new game.Tile();
+          if (this.data[i][j] !== newDataMap[i][j]) {
+            this.tiles.removeChild(this.viewMap[i][j]);
 
-          // layout title in rombo shape.
-          tile.x = ((j - i) * game.Tile.width) / 2;
-          tile.y = ((j + i) * game.Tile.height) / 2;
-          this.tiles.addChild(tile);
+            var className = newDataMap[i][j];
 
-          this.viewMap[i][j] = tile;
+            // sprite based on the selected building type
+            var tile = new game[className]();
+
+            tile.x = ((j - i) * game.Tile.width) / 2;
+            tile.y = ((j + i) * game.Tile.height) / 2;
+            this.tiles.addChild(tile);
+
+            this.viewMap[i][j] = tile;
+          }
         }
       }
+
+      this.data = newDataMap;
+
+      // Reorder the building based on Y
+      this.tiles.sortChildren(function (b1, b2) {
+        if (b1.y > b2.y) {
+          return 1;
+        }
+        if (b1.y < b2.y) {
+          return -1;
+        }
+        return 0;
+      });
     };
 
     return CityLayer;
@@ -112,9 +248,17 @@ var createjs = createjs || {};
   game.UILayer = (function () {
     function UILayer() {
       Layer.call(this); // super
+
       this.setupHUD();
 
       this.setupBuildingPanel();
+
+      var _this = this; // for event handler to refer to 'this'
+
+      game.on("placedBuilding", function () {
+        _this.cancelBuildBtn.visible = false;
+        _this.newBuildingBtn.visible = true;
+      });
     }
     UILayer.prototype = Object.create(Layer.prototype);
     UILayer.prototype.placeBitmap = function (path, x, y) {
@@ -182,7 +326,7 @@ var createjs = createjs || {};
         _this.buildingPanel.addChild(button);
 
         button.on("click", function () {
-          game.buildingTypeToBePlaces = b.name;
+          game.buildingTypeToBePlaced = b.name;
           _this.readyToPlaceBuilding();
         });
 
@@ -286,8 +430,8 @@ var createjs = createjs || {};
     UILayer.prototype.readyToPlaceBuilding = function () {
       this.buildingPanel.visible = false;
       this.cancelBuildBtn.visible = true;
-      this.isCreatingNewBuilding = true;
-      // game.dispatchEvent('newBuildingToBePlaced');
+      game.isCreatingNewBuilding = true;
+      game.dispatchEvent("newBuildingToBePlaced");
     };
 
     return UILayer;
@@ -297,6 +441,8 @@ var createjs = createjs || {};
 // The Game Logic
 (function (game, cjs) {
   game.start = function () {
+    cjs.EventDispatcher.initialize(game); // allow the game object to listen and dispatch custom events.
+
     game.stage = new cjs.Stage(game.canvas);
     game.stage.enableMouseOver();
 
