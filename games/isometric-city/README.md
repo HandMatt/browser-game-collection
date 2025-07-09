@@ -23,9 +23,9 @@ http://localhost:8000
 - [x] ~~design the game's user interface~~
 - [x] ~~place the tiles and grid in the city layer~~
 - [x] ~~choosing which building to build~~
-- [ ] placing buildings on the floor
-- [ ] growing buildings
-- [ ] generating coins and diamonds
+- [x] placing buildings on the floor
+- [x] growing buildings
+- [x] generating coins and diamonds
 - [ ] collecting pop-up diamonds
 - [ ] saving and loading game progress
 - [ ] add day-night cycle

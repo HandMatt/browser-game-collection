@@ -8,6 +8,8 @@ var createjs = createjs || {};
   game.setting = {
     gameWidth: game.canvas.width,
     gameHeight: game.canvas.height,
+    tickCountForMerchantDiamond: 800,
+    coinsNeededForDiamond: 200,
   };
 }).call(this, game);
 
@@ -26,16 +28,17 @@ var createjs = createjs || {};
 
   game.buildingsList = [];
 
+  // grow the building on every tick.
   var cityGrowing = (game.cityGrowing = {});
   cityGrowing.tick = function () {
     for (var i = 0, len = game.buildingsList.length; i < len; i++) {
       var building = game.buildingsList[i];
 
       // is construction in the next stage?
-      var secondsDiff =
-        Math.floor(new Date().getTime() - building.buildTime) / 1000; // seconds
+      var secondsDiff = Math.floor(
+        (new Date().getTime() - building.buildTime) / 1000
+      );
       for (var j = 0, length = building.stepsSeconds.length; j < length; j++) {
-        // loop the steps
         if (secondsDiff >= building.stepsSeconds[j]) {
           building.currentStep = j + 2;
           if (building.currentStep > length) {
@@ -459,6 +462,9 @@ var createjs = createjs || {};
       game.isCreatingNewBuilding = true;
       game.dispatchEvent("newBuildingToBePlaced");
     };
+    UILayer.prototype.popDiamond = function (building) {
+      game.diamonds += 1;
+    };
 
     return UILayer;
   })();
@@ -476,6 +482,8 @@ var createjs = createjs || {};
     game.diamonds = 0;
     game.powerSupply = 100;
     game.population = 0;
+    game.coinGenerationCountdown = 90;
+    game.coinGenerationCount = 0;
 
     // in correct order: from background to foreground
     game.backgroundLayer = new game.BGLayer();
@@ -497,6 +505,72 @@ var createjs = createjs || {};
       "tick",
       game.cityGrowing.tick.bind(game.cityGrowing)
     );
+    cjs.Ticker.addEventListener("tick", game.tick);
+  };
+
+  game.calculateBuildingsEffects = function () {
+    // refresh the population and power supply based on the building list.
+    game.powerSupply = 10;
+    game.population = 0;
+    game.coinGenerationCountdown = 90; // default value, will be affected by coin generators
+
+    for (var i = 0, len = game.buildingsList.length; i < len; i++) {
+      var b = game.buildingsList[i];
+      var data = game.BuildingsData[b.name];
+
+      evaluatePopulation(data.needPopulation);
+
+      if (b.isConstructionDone) {
+        // only count power after it is built.
+        evaluatePowerSupply(data.power);
+
+        if (b.name === "CoinsGenerator") {
+          evaluateCoinsGeneration();
+        }
+
+        if (b.name === "Merchant") {
+          evaluateMerchant(b);
+        }
+      }
+    }
+  };
+
+  function evaluatePopulation(value) {
+    game.population += value;
+  }
+
+  function evaluatePowerSupply(value) {
+    game.powerSupply += value;
+  }
+
+  function evaluateCoinsGeneration() {
+    // each coin generator speed up the count down by 3 units.
+    game.coinGenerationCountdown -= 3;
+  }
+
+  function evaluateMerchant(building) {
+    var b = building;
+    if (!b.diamondTick) {
+      b.diamondTick = 0;
+    }
+    b.diamondTick += 1;
+    if (b.diamondTick >= game.setting.tickCountForMerchantDiamond) {
+      // trade coins to diamonds
+      if (game.coins >= game.setting.coinsNeededForDiamond) {
+        game.coins -= game.setting.coinsNeededForDiamond;
+        game.uiLayer.popDiamond(b);
+        b.diamondTick = 0;
+      }
+    }
+  }
+
+  game.tick = function () {
+    game.coinGenerationCount += 1;
+    if (game.coinGenerationCount >= game.coinGenerationCountdown) {
+      game.coins += 1;
+      game.coinGenerationCount = 0;
+    }
+    game.calculateBuildingsEffects();
   };
 }).call(this, game, createjs);
 
