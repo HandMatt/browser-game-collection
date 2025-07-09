@@ -26,7 +26,11 @@ var createjs = createjs || {};
     this.buildTime = new Date().getTime();
   };
 
-  game.buildingsList = [];
+  if (localStorage["city.buildinglist"]) {
+    game.buildingsList = JSON.parse(localStorage["city.buildinglist"]);
+  } else {
+    game.buildingsList = [];
+  }
 
   // grow the building on every tick.
   var cityGrowing = (game.cityGrowing = {});
@@ -489,10 +493,11 @@ var createjs = createjs || {};
     game.stage = new cjs.Stage(game.canvas);
     game.stage.enableMouseOver();
 
-    game.coins = 1000;
-    game.diamonds = 0;
+    game.coins = localStorage["city.coins"] * 1 || 10; // *1 to force converting string to number
+    game.diamonds = localStorage["city.diamonds"] * 1 || 0;
     game.powerSupply = 100;
     game.population = 0;
+
     game.coinGenerationCountdown = 90;
     game.coinGenerationCount = 0;
 
@@ -517,9 +522,9 @@ var createjs = createjs || {};
       game.cityGrowing.tick.bind(game.cityGrowing)
     );
     cjs.Ticker.addEventListener("tick", game.tick);
+    cjs.Ticker.addEventListener("tick", game.autoSave);
 
     game.on("clickedDiamond", function () {
-      console.log("event fired");
       game.diamonds += 1;
     });
   };
@@ -587,6 +592,14 @@ var createjs = createjs || {};
       game.coinGenerationCount = 0;
     }
     game.calculateBuildingsEffects();
+  };
+
+  game.autoSave = function () {
+    if (cjs.Ticker.getTicks() % 100 === 0) {
+      localStorage["city.coins"] = game.coins;
+      localStorage["city.diamonds"] = game.diamonds;
+      localStorage["city.buildinglist"] = JSON.stringify(game.buildingsList);
+    }
   };
 }).call(this, game, createjs);
 

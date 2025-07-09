@@ -26,9 +26,12 @@ http://localhost:8000
 - [x] placing buildings on the floor
 - [x] growing buildings
 - [x] generating coins and diamonds
-- [ ] collecting pop-up diamonds
-- [ ] saving and loading game progress
+- [x] collecting pop-up diamonds
+- [x] saving and loading game progress
 - [ ] add day-night cycle
+- [ ] upgradable buildings
+- [ ] add mini-quests
+- [ ] speed up / time skip
 
 ## License
 
