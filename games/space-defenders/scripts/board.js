@@ -173,7 +173,7 @@ var lib = lib || {};
 
           // damage enemy
           enemy.damage(bullet.damageDeal);
-          if (enemy.hp < -0) {
+          if (enemy.hp <= 0) {
             this.enemyMap[enemy.col][enemy.row] = undefined;
             game.helper.removeItem(this.enemyList, enemy);
             enemy.parent.removeChild(enemy);

@@ -8,29 +8,142 @@ var createjs = createjs || {};
   game.waves.isActive = false;
 
   game.waves.enemySummonOrders = [
-    "enemyDummy",
+    "EnemyDummy",
     "Enemy1",
     "Enemy2",
     "Enemy3",
     "Boss",
     "Boss2",
   ];
+
   game.waves.data = [
     {
-      // wave 1
-      EnemyDummy: 1, // summon 1 EnemyDummy during the wave
+      EnemyDummy: 1,
       frequency: 10,
     },
     {
-      // wave 2
-      EnemyDummy: 8, // summon 8 EnemyDummy, one by one
-      Enemy1: 5, // summon 5 Enemy1 after EnemyDummy
-      Enemy2: 5,
-      Boss: 2,
-      frequency: 150, // how frequent enemy appears
+      EnemyDummy: 5,
+      frequency: 400,
     },
     {
-      // wave 3
+      EnemyDummy: 10,
+      frequency: 350,
+    },
+    {
+      EnemyDummy: 6,
+      Enemy1: 3,
+      frequency: 300,
+    },
+    {
+      EnemyDummy: 3,
+      Enemy1: 3,
+      frequency: 300,
+    },
+    {
+      EnemyDummy: 6,
+      Enemy1: 6,
+      frequency: 250,
+    },
+    {
+      Enemy1: 5,
+      Enemy2: 3,
+      Boss: 1,
+      frequency: 200,
+    },
+    {
+      Enemy1: 5,
+      Enemy2: 5,
+      Boss: 1,
+      frequency: 150,
+    },
+    {
+      EnemyDummy: 6,
+      Enemy1: 5,
+      Enemy2: 5,
+      Boss: 1,
+      frequency: 150,
+    },
+    {
+      EnemyDummy: 8,
+      Enemy1: 5,
+      Enemy2: 5,
+      Boss: 2,
+      frequency: 150,
+    },
+    {
+      EnemyDummy: 10,
+      Enemy1: 8,
+      Enemy2: 8,
+      Boss: 1,
+      frequency: 150,
+    },
+    {
+      EnemyDummy: 6,
+      Enemy1: 10,
+      Enemy2: 10,
+      Boss: 1,
+      frequency: 140,
+    },
+    {
+      EnemyDummy: 3,
+      Enemy1: 10,
+      Enemy2: 10,
+      Enemy3: 1,
+      Boss: 1,
+      frequency: 135,
+    },
+    {
+      EnemyDummy: 1,
+      Enemy1: 10,
+      Enemy2: 10,
+      Enemy3: 1,
+      Boss: 1,
+      frequency: 135,
+    },
+    {
+      Enemy1: 10,
+      Enemy2: 10,
+      Enemy3: 2,
+      Boss: 2,
+      frequency: 135,
+    },
+    {
+      Enemy1: 5,
+      Enemy2: 15,
+      Enemy3: 2,
+      Boss: 2,
+      frequency: 135,
+    },
+    {
+      Enemy1: 1,
+      Enemy2: 10,
+      Enemy3: 10,
+      Boss: 2,
+      frequency: 135,
+    },
+    {
+      Enemy1: 5,
+      Enemy2: 10,
+      Enemy3: 10,
+      Boss: 4,
+      frequency: 130,
+    },
+    {
+      Enemy1: 5,
+      Enemy2: 10,
+      Enemy3: 12,
+      Boss: 4,
+      Boss2: 4,
+      frequency: 130,
+    },
+    {
+      Enemy1: 3,
+      Enemy2: 10,
+      Enemy3: 12,
+      Boss2: 4,
+      frequency: 125,
+    },
+    {
       EnemyDummy: 1,
       Enemy1: 1,
       Enemy2: 1,

@@ -2,6 +2,18 @@ var game = this.game || (this.game = {});
 var createjs = createjs || {};
 
 (function (game, cjs) {
+  game.load = function () {
+    // load bitmap assets before starts the game
+    var loader = new createjs.LoadQueue(false);
+    loader.addEventListener("fileload", function (e) {
+      if (e.item.type === "image") {
+        images[e.item.id] = e.result;
+      } // assign to images object for assets.js to use
+    });
+    loader.addEventListener("complete", game.start);
+    loader.loadManifest(lib.properties.manifest);
+  };
+
   game.start = function () {
     cjs.EventDispatcher.initialize(game); // allow the game object to listen and dispatch custom events.
 
@@ -73,5 +85,5 @@ var createjs = createjs || {};
     }
   };
 
-  game.start();
+  game.load();
 }).call(this, game, createjs);

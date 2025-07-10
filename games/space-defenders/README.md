@@ -42,8 +42,17 @@ http://localhost:8000
 - [x] ~~generate energy~~
 - [x] ~~enemies attack the buildings~~
 - [x] ~~fire bullets and attack the enemies~~
-- [ ] control enemy waves
-- [ ] load the bitmap graphics into the game
+- [x] ~~control enemy waves~~
+- [x] load the bitmap graphics into the game
+- [ ] upgrade hud
+- [ ] provice more statistics
+- [ ] managinf scenes
+- [ ] add a pause button
+- [ ] add keyboard shortcuts
+- [ ] introduce a new currency
+- [ ] allow player to remove buildings/upgrade
+- [ ] game balancing
+- [ ]
 
 ## License
 
