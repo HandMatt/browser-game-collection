@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Space Defense</title>
+  <link rel="stylesheet" href="styles/game.css">
+</head>
+
+<body>
+  <section id="game" class="row">
+    <canvas id="canvas" width="640" height="1000"></canvas>
+    <div id="hud">
+      <div>Lives: <span id="lives"></span></div>
+      <div>E: <span id="energies"></span></div>
+      <div>Waves: <span id="waves"></span></div>
+    </div>
+    <div class="add-buttons">
+      <a class='add-button' title='Space Junk' data-type='SpaceJunk'>J</a>
+      <a class='add-button' title='Satellite' data-type='Satellite'>S</a>
+      <a class='add-button' title='Satellite+' data-type='Satellite2'>S+</a>
+      <a class='add-button' title='Castle' data-type='Castle'>C</a>
+      <a class='add-button' title='Castle+' data-type='Castle2'>C+</a>
+    </div>
+  </section>
+  <header>
+    <div class="row">
+      <h1>Space Defense</h1>
+    </div>
+  </header>
+  <section class="how-to-play row">
+    <h2>How to Play?</h2>
+  </section>
+  <footer>
+    <div class="row">
+      <p>Copyright goes here.</p>
+    </div>
+  </footer>
+
+  <script src="vendors/easeljs.min.js"></script>
+  <script src="vendors/tweenjs.min.js"></script>
+  <script src="scripts/assets.js"></script>
+  <script src="scripts/hud.js"></script>
+  <script src="scripts/board.js"></script>
+  <script src="scripts/game.js"></script>
+
+</body>
+
+</html>
