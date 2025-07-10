@@ -31,7 +31,7 @@ var createjs = createjs || {};
   function tick() {
     lives.textContent = game.lives;
     energies.textContent = game.energies;
-    waves.textContent = 1;
+    waves.textContent = game.waves.nextWave + 1; // logic starts at 0, our display starts at 1
   }
 
   cjs.Ticker.addEventListener("tick", tick);

@@ -82,6 +82,15 @@ var lib = lib || {};
     this.removeChild(building);
   };
 
+  Board.prototype.removeAllBuildings = function () {
+    for (var i = 0; i < this.cols; i++) {
+      for (var j = 0; j < this.rows; j++) {
+        if (this.buildingMap[i][j]) {
+          this.removeBuilding(this.buildingMap[i][j]);
+        }
+      }
+    }
+  };
   Board.prototype.addEnemy = function (enemyClass) {
     var sprite = new game[enemyClass]();
     this.addChild(sprite);
@@ -97,9 +106,17 @@ var lib = lib || {};
 
     this.enemyList.push(sprite);
   };
+  // Have all existing enemies been killed?
+  Board.prototype.areEnemiesCleared = function () {
+    return this.enemyList.length === 0;
+  };
   Board.prototype.addBullet = function (bullet) {
     game.effectLayer.addChild(bullet);
     this.bulletList.push(bullet);
+  };
+  Board.prototype.removeAllBullets = function () {
+    this.bulletList.length = 0;
+    game.effectLayer.removeAllChildren();
   };
   // Tick Loop
   Board.prototype.tick = function () {
@@ -223,6 +240,7 @@ var lib = lib || {};
 
     if (this.buildingMap[col][row] === undefined) {
       this.addBuildingAtTile(this.upcomingBuildingType, col, row);
+
       this.isAddingBuilding = false;
       this.selection.visible = false;
     }
