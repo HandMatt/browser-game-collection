@@ -30,6 +30,8 @@ var lib = lib || {};
 
     // list of buildings
     this.buildingMap = game.helper.create2DArray(this.cols, this.rows);
+    this.enemyMap = game.helper.create2DArray(this.cols, this.rows);
+    this.enemyList = [];
 
     // event handling
     game.on("readyToPlaceBuilding", this.readyToPlaceBuilding.bind(this));
@@ -37,6 +39,9 @@ var lib = lib || {};
     // mouse interaction
     game.stage.on("stagemousemove", this.onMouseMove.bind(this));
     game.stage.on("stagemouseup", this.onClick.bind(this));
+
+    // tick
+    this.on("tick", this.tick);
   }
 
   Board.prototype = Object.create(cjs.Container.prototype);
@@ -67,6 +72,53 @@ var lib = lib || {};
     sprite.col = col;
 
     this.buildingMap[col][row] = sprite;
+  };
+
+  Board.prototype.addEnemy = function (enemyClass) {
+    var sprite = new game[enemyClass]();
+    this.addChild(sprite);
+
+    var col = Math.floor(Math.random() * this.cols); // random col
+    var pos = this.rowColToScreen(0, col);
+    sprite.x = pos.x;
+    sprite.y = pos.y;
+
+    // store row/col for easy access later
+    sprite.row = 0;
+    sprite.col = col;
+
+    this.enemyList.push(sprite);
+  };
+
+  // Tick Loop
+  Board.prototype.tick = function () {
+    if (cjs.Ticker.paused) {
+      return;
+    }
+
+    // update the row/col for each enemy on the board
+    this.enemyMap = game.helper.create2DArray(this.cols, this.rows);
+    for (var i = 0, len = this.enemyList.length; i < len; i++) {
+      var enemy = this.enemyList[i];
+      var rowCol = this.screenToRowCol(enemy.x, enemy.y);
+
+      // update both map and enemy's row/col
+      this.enemyMap[rowCol.col][rowCol.row] = enemy;
+      enemy.col = rowCol.col;
+      enemy.row = rowCol.row;
+    }
+
+    // check succeed enemies
+    // succeed enemies means it goes through the bottom area.
+    for (var i = 0, len = this.enemyMap.length; i < len; i++) {
+      if (this.enemyMap[i][this.rows] !== undefined) {
+        // found enemy at lthe last row
+        var enemy = this.enemyMap[i][this.rows];
+        game.lives -= 1;
+        game.helper.removeItem(this.enemyList, enemy);
+        enemy.parent.removeChild(enemy);
+      }
+    }
   };
 
   // Event Handlings

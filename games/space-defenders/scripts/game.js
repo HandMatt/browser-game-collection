@@ -27,12 +27,33 @@ var createjs = createjs || {};
     cjs.Ticker.framerate = 40;
     cjs.Ticker.addEventListener("tick", game.stage); // add game.stage to ticker make the stage.update call automatically.
     cjs.Ticker.addEventListener("tick", game.tick); // gameloop
+
+    // temporary code
+    game.boardLayer.addEnemy("EnemyDummy");
+    game.boardLayer.addEnemy("Enemy1");
+    game.boardLayer.addEnemy("Enemy2");
+    game.boardLayer.addEnemy("Enemy3");
+    game.boardLayer.addEnemy("Enemy3");
+    game.boardLayer.addEnemy("Enemy3");
+    game.boardLayer.addEnemy("Enemy3");
+    game.boardLayer.addEnemy("Enemy3");
+    game.boardLayer.addEnemy("Boss");
+
+    // end temporary code
+  };
+
+  game.gameOver = function () {
+    cjs.Ticker.paused = true;
   };
 
   game.tick = function () {
     if (cjs.Ticker.paused) {
       return;
     } // run when not paused
+
+    if (game.lives <= 0) {
+      game.gameOver;
+    }
   };
 
   game.start();

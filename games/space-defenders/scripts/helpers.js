@@ -13,4 +13,13 @@ var createjs = createjs || {};
     }
     return array;
   };
+  game.helper.removeItem = function (array, target) {
+    for (var i = 0, len = array.length; i < len; i++) {
+      if (array[i] === target) {
+        array.splice(i, 1); // remove that target
+        return true;
+      }
+    }
+    return false;
+  };
 }).call(this, game, createjs);
