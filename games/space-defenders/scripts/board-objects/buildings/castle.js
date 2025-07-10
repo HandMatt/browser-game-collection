@@ -17,8 +17,28 @@ var lib = lib || {};
 
     this.damageDeal = 2;
     this.attackSpeed = 120; // smaller means faster
+
+    this.ticks = 0;
+    this.on("tick", this.tick);
   }
   Castle.prototype = Object.create(game.Building.prototype);
+  Castle.prototype.tick = function () {
+    if (cjs.Ticker.paused) {
+      return;
+    }
+
+    this.ticks += 1;
+    // summon bulled every once in a while
+    if (this.ticks % this.attackSpeed === 0) {
+      this.summonBullet();
+    }
+  };
+  Castle.prototype.summonBullet = function () {
+    var bullet = new game.Bullet(this.damageDeal);
+    bullet.x = this.x + Math.random() * 20 - 10;
+    bullet.y = this.y;
+    this.parent.addBullet(bullet);
+  };
 
   Castle.cost = 80;
   game.Castle = Castle;

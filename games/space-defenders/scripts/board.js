@@ -28,10 +28,13 @@ var lib = lib || {};
     // by default, we are not adding building
     this.isAddingBuilding = false;
 
-    // list of buildings
+    // list of buildings and enemies
     this.buildingMap = game.helper.create2DArray(this.cols, this.rows);
     this.enemyMap = game.helper.create2DArray(this.cols, this.rows);
     this.enemyList = [];
+
+    // bullet list for centralised collision detection
+    this.bulletList = [];
 
     // event handling
     game.on("readyToPlaceBuilding", this.readyToPlaceBuilding.bind(this));
@@ -94,7 +97,10 @@ var lib = lib || {};
 
     this.enemyList.push(sprite);
   };
-
+  Board.prototype.addBullet = function (bullet) {
+    game.effectLayer.addChild(bullet);
+    this.bulletList.push(bullet);
+  };
   // Tick Loop
   Board.prototype.tick = function () {
     if (cjs.Ticker.paused) {
@@ -134,6 +140,32 @@ var lib = lib || {};
         enemy.startAttack(target);
       } else {
         enemy.stopAttack();
+      }
+    }
+
+    // check for bullet collision
+    // loop from to[ becuase we remove item inside loop
+    for (var i = this.enemyList.length - 1; i >= 0; i--) {
+      // loop all bullets
+      for (var j = this.bulletList.length - 1; j >= 0; j--) {
+        var bullet = this.bulletList[j];
+        var pos = bullet.localToLocal(0, 0, this);
+        var rowCol = this.screenToRowCol(pos.x, pos.y);
+        if (this.enemyMap[rowCol.col][rowCol.row] !== undefined) {
+          var enemy = this.enemyMap[rowCol.col][rowCol.row];
+
+          // damage enemy
+          enemy.damage(bullet.damageDeal);
+          if (enemy.hp < -0) {
+            this.enemyMap[enemy.col][enemy.row] = undefined;
+            game.helper.removeItem(this.enemyList, enemy);
+            enemy.parent.removeChild(enemy);
+          }
+
+          // remove bullet
+          game.helper.removeItem(this.bulletList, bullet);
+          bullet.parent.removeChild(bullet);
+        }
       }
     }
 

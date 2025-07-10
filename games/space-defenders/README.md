@@ -38,10 +38,10 @@ http://localhost:8000
 
 - [x] ~~set up the user interface~~
 - [x] ~~place the defence buildings~~
-- [ ] summon the enemies
-- [ ] generate energy
-- [ ] enemies attack the buildings
-- [ ] fire bullets and attack the enemies
+- [x] ~~summon the enemies~~
+- [x] ~~generate energy~~
+- [x] ~~enemies attack the buildings~~
+- [x] ~~fire bullets and attack the enemies~~
 - [ ] control enemy waves
 - [ ] load the bitmap graphics into the game
 
