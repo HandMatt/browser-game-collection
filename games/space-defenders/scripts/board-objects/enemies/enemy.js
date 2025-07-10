@@ -4,6 +4,10 @@ var lib = lib || {};
 
 // Enemy moves down and attacks buildings
 (function (game, cjs, lib) {
+
+
+
+    
   function Enemy() {
     cjs.Container.call(this);
 
