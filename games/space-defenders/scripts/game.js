@@ -11,7 +11,7 @@ var createjs = createjs || {};
 
     // game parameters
     game.lives = 20;
-    game.energies = 120; // used to create building
+    game.energies = 99999; // used to create building
 
     // layers
     var bgLayer = (game.bgLayer = new cjs.Container());
@@ -24,13 +24,13 @@ var createjs = createjs || {};
     var effectLayer = (game.effectLayer = new cjs.Container());
     game.stage.addChild(effectLayer);
 
-    cjs.Ticker.setFPS(40);
+    cjs.Ticker.framerate = 40;
     cjs.Ticker.addEventListener("tick", game.stage); // add game.stage to ticker make the stage.update call automatically.
-    cjs.Ticker.addEventListener("tick".game.tick); // gameloop
+    cjs.Ticker.addEventListener("tick", game.tick); // gameloop
   };
 
   game.tick = function () {
-    if (cjs.Ticker.getPaused()) {
+    if (cjs.Ticker.paused) {
       return;
     } // run when not paused
   };

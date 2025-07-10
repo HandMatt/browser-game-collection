@@ -12,7 +12,7 @@ var createjs = createjs || {};
   for (var i = 0, len = addButtons.length; i < len; i++) {
     var button = addButtons[i];
     button.onmousedown = function (e) {
-      if (cjs.Ticker.getPaused()) {
+      if (cjs.Ticker.paused) {
         return;
       }
       var buildingType = this.dataset.type;

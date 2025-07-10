@@ -36,8 +36,8 @@ http://localhost:8000
 
 ## Development TODO
 
-- [x] set up the user interface
-- [ ] place the defence buildings
+- [x] ~~set up the user interface~~
+- [x] ~~place the defence buildings~~
 - [ ] summon the enemies
 - [ ] generate energy
 - [ ] enemies attack the buildings

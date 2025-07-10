@@ -19,9 +19,101 @@ var lib = lib || {};
     var sprite = new lib.Board();
     this.addChild(sprite);
     sprite.y = this.tileHeight;
+
+    // Selection graphic
+    this.selection = new lib.Selection();
+    this.addChild(this.selection);
+    this.selection.visible = false;
+
+    // by default, we are not adding building
+    this.isAddingBuilding = false;
+
+    // list of buildings
+    this.buildingMap = game.helper.create2DArray(this.cols, this.rows);
+
+    // event handling
+    game.on("readyToPlaceBuilding", this.readyToPlaceBuilding.bind(this));
+
+    // mouse interaction
+    game.stage.on("stagemousemove", this.onMouseMove.bind(this));
+    game.stage.on("stagemouseup", this.onClick.bind(this));
   }
 
   Board.prototype = Object.create(cjs.Container.prototype);
+
+  // utilities
+  Board.prototype.screenToRowCol = function (x, y) {
+    var col = Math.floor(x / this.tileWidth);
+    var row = Math.floor(y / this.tileHeight);
+    return { col: col, row: row };
+  };
+  Board.prototype.rowColToScreen = function (row, col) {
+    var x = this.tileWidth * (col + 0.5); // +0.5 for tile center
+    var y = this.tileHeight * (row + 0.5);
+    return { x: x, y: y };
+  };
+
+  // Summon new piece on board
+  Board.prototype.addBuildingAtTile = function (buildingClass, col, row) {
+    var sprite = new game[buildingClass]();
+    this.addChild(sprite);
+
+    var pos = this.rowColToScreen(row, col);
+    sprite.x = pos.x;
+    sprite.y = pos.y;
+
+    // store row/col for easy access later
+    sprite.row = row;
+    sprite.col = col;
+
+    this.buildingMap[col][row] = sprite;
+  };
+
+  // Event Handlings
+  Board.prototype.readyToPlaceBuilding = function (e) {
+    this.upcomingBuildingType = e.buildingType;
+    this.isAddingBuilding = true;
+  };
+
+  Board.prototype.onMouseMove = function (e) {
+    if (!this.isAddingBuilding) {
+      return;
+    }
+
+    var pos = this.globalToLocal(e.stageX, e.stageY);
+    // convert to tile row and col
+    var rowCol = this.screenToRowCol(pos.x, pos.y);
+    var pos = this.rowColToScreen(rowCol.row, rowCol.col);
+
+    this.selection.visible = true;
+
+    // finally set the position
+    this.selection.x = pos.x;
+    this.selection.y = pos.y;
+  };
+
+  Board.prototype.onClick = function (e) {
+    if (!this.isAddingBuilding) {
+      return;
+    }
+
+    // coordinate conversation
+    var pos = this.globalToLocal(e.stageX, e.stageY);
+    var rowCol = this.screenToRowCol(pos.x, pos.y);
+    var row = rowCol.row;
+    var col = rowCol.col;
+
+    // check out of bound
+    if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) {
+      return;
+    }
+
+    if (this.buildingMap[col][row] === undefined) {
+      this.addBuildingAtTile(this.upcomingBuildingType, col, row);
+      this.isAddingBuilding = false;
+      this.selection.visible = false;
+    }
+  };
 
   game.Board = Board;
 }).call(this, game, createjs, lib);
