@@ -74,6 +74,11 @@ var lib = lib || {};
     this.buildingMap[col][row] = sprite;
   };
 
+  Board.prototype.removeBuilding = function (building) {
+    this.buildingMap[building.col][building.row] = undefined;
+    this.removeChild(building);
+  };
+
   Board.prototype.addEnemy = function (enemyClass) {
     var sprite = new game[enemyClass]();
     this.addChild(sprite);
@@ -106,6 +111,30 @@ var lib = lib || {};
       this.enemyMap[rowCol.col][rowCol.row] = enemy;
       enemy.col = rowCol.col;
       enemy.row = rowCol.row;
+    }
+
+    // check enemy contacts buildings
+    for (var i = this.enemyList.length - 1; i >= 0; i--) {
+      var enemy = this.enemyList[i];
+      var row = enemy.row;
+      var col = enemy.col;
+
+      // contact building
+      var target = undefined;
+      if (this.buildingMap[col][row] !== undefined) {
+        // current tile
+        target = this.buildingMap[col][row];
+      } else if (this.buildingMap[col][row + 1] !== undefined) {
+        // next tile
+        target = this.buildingMap[col][row + 1];
+      }
+      // has target
+      if (target !== undefined) {
+        enemy.speed -= enemy.deceleration;
+        enemy.startAttack(target);
+      } else {
+        enemy.stopAttack();
+      }
     }
 
     // check succeed enemies
