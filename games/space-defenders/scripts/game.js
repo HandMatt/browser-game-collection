@@ -11,7 +11,7 @@ var createjs = createjs || {};
 
     // game parameters
     game.lives = 20;
-    game.energies = 99999; // used to create building
+    game.energies = 120; // used to create building
 
     // layers
     var bgLayer = (game.bgLayer = new cjs.Container());

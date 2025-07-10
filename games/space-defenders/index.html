@@ -1,64 +1,68 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimal-ui"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Space Defense</title>
+    <link rel="stylesheet" href="styles/game.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
-  <meta name="mobile-web-app-capable" content="yes">
-  <title>Space Defense</title>
-  <link rel="stylesheet" href="styles/game.css">
-</head>
+  <body>
+    <section id="game" class="row">
+      <canvas id="canvas" width="640" height="1000"></canvas>
+      <div id="hud">
+        <div>Lives: <span id="lives"></span></div>
+        <div>E: <span id="energies"></span></div>
+        <div>Waves: <span id="waves"></span></div>
+      </div>
+      <div class="add-buttons">
+        <a class="add-button" title="Space Junk" data-type="SpaceJunk">J</a>
+        <a class="add-button" title="Satellite" data-type="Satellite">S</a>
+        <a class="add-button" title="Satellite+" data-type="Satellite2">S+</a>
+        <a class="add-button" title="Castle" data-type="Castle">C</a>
+        <a class="add-button" title="Castle+" data-type="Castle2">C+</a>
+      </div>
+    </section>
+    <header>
+      <div class="row">
+        <h1>Space Defense</h1>
+      </div>
+    </header>
+    <section class="how-to-play row">
+      <h2>How to Play?</h2>
+    </section>
+    <footer>
+      <div class="row">
+        <p>
+          This game is a modified example from the HTML5 Game Development
+          Hotshot book by Makzan. Free for personal and commerical use.
+        </p>
+      </div>
+    </footer>
 
-<body>
-  <section id="game" class="row">
-    <canvas id="canvas" width="640" height="1000"></canvas>
-    <div id="hud">
-      <div>Lives: <span id="lives"></span></div>
-      <div>E: <span id="energies"></span></div>
-      <div>Waves: <span id="waves"></span></div>
-    </div>
-    <div class="add-buttons">
-      <a class='add-button' title='Space Junk' data-type='SpaceJunk'>J</a>
-      <a class='add-button' title='Satellite' data-type='Satellite'>S</a>
-      <a class='add-button' title='Satellite+' data-type='Satellite2'>S+</a>
-      <a class='add-button' title='Castle' data-type='Castle'>C</a>
-      <a class='add-button' title='Castle+' data-type='Castle2'>C+</a>
-    </div>
-  </section>
-  <header>
-    <div class="row">
-      <h1>Space Defense</h1>
-    </div>
-  </header>
-  <section class="how-to-play row">
-    <h2>How to Play?</h2>
-  </section>
-  <footer>
-    <div class="row">
-      <p>Copyright goes here.</p>
-    </div>
-  </footer>
-
-  <script src="vendors/easeljs.min.js"></script>
-  <script src="vendors/tweenjs.min.js"></script>
-  <script src="scripts/assets.js"></script>
-  <script src="scripts/helpers.js"></script>
-  <script src="scripts/board-objects/enemies/enemy.js"></script>
-  <script src="scripts/board-objects/enemies/enemy-dummy.js"></script>
-  <script src="scripts/board-objects/enemies/enemy1.js"></script>
-  <script src="scripts/board-objects/enemies/enemy2.js"></script>
-  <script src="scripts/board-objects/enemies/enemy3.js"></script>
-  <script src="scripts/board-objects/enemies/boss.js"></script>
-  <script src="scripts/board-objects/buildings/building.js"></script>
-  <script src="scripts/board-objects/buildings/space-junk.js"></script>
-  <script src="scripts/board-objects/buildings/satellite.js"></script>
-  <script src="scripts/board-objects/buildings/satellite2.js"></script>
-  <script src="scripts/board-objects/buildings/castle.js"></script>
-  <script src="scripts/board-objects/buildings/castle2.js"></script>
-  <script src="scripts/hud.js"></script>
-  <script src="scripts/board.js"></script>
-  <script src="scripts/game.js"></script>
-
-</body>
-
+    <script src="vendors/easeljs.min.js"></script>
+    <script src="vendors/tweenjs.min.js"></script>
+    <script src="scripts/assets.js"></script>
+    <script src="scripts/helpers.js"></script>
+    <script src="scripts/board-objects/enemies/enemy.js"></script>
+    <script src="scripts/board-objects/enemies/enemy-dummy.js"></script>
+    <script src="scripts/board-objects/enemies/enemy1.js"></script>
+    <script src="scripts/board-objects/enemies/enemy2.js"></script>
+    <script src="scripts/board-objects/enemies/enemy3.js"></script>
+    <script src="scripts/board-objects/enemies/boss.js"></script>
+    <script src="scripts/board-objects/energy.js"></script>
+    <script src="scripts/board-objects/buildings/building.js"></script>
+    <script src="scripts/board-objects/buildings/space-junk.js"></script>
+    <script src="scripts/board-objects/buildings/satellite.js"></script>
+    <script src="scripts/board-objects/buildings/satellite2.js"></script>
+    <script src="scripts/board-objects/buildings/castle.js"></script>
+    <script src="scripts/board-objects/buildings/castle2.js"></script>
+    <script src="scripts/hud.js"></script>
+    <script src="scripts/board.js"></script>
+    <script src="scripts/game.js"></script>
+  </body>
 </html>

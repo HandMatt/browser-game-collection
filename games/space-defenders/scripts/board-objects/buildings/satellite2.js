@@ -14,6 +14,7 @@ var lib = lib || {};
 
     // override
     this.hp = 150;
+    this.energyFrequency = 100;
   }
   Satellite2.prototype = Object.create(game.Satellite.prototype);
 
