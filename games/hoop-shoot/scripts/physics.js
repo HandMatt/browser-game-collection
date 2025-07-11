@@ -26,26 +26,134 @@ var Box2D = Box2D || {};
   physics.createWorld = function () {
     var gravity = new b2Vec2(0, 9.8);
     this.world = new b2World(gravity, /*allow sleep= */ true);
+  };
 
-    // create two temporary bodies
+  physics.createLevel = function () {
+    this.createHoop();
+
+    // the first ball
+    this.spawnBall();
+  };
+
+  physics.createHoop = function () {
+    var hoopX = 50;
+    var hoopY = 100;
+
     var bodyDef = new b2BodyDef();
     var fixDef = new b2FixtureDef();
 
+    // default fixture
+    fixDef.density = 1.0;
+    fixDef.friction = 0.5;
+    fixDef.restitution = 0.2;
+
+    // hoop
     bodyDef.type = b2Body.b2_staticBody;
-    bodyDef.position.x = 100 / pxPerMeter;
-    bodyDef.position.y = 100 / pxPerMeter;
+    bodyDef.position.x = hoopX / pxPerMeter;
+    bodyDef.position.y = hoopY / pxPerMeter;
+    bodyDef.angle = 0;
 
     fixDef.shape = new b2PolygonShape();
-    fixDef.shape.SetAsBox(20 / pxPerMeter, 20 / pxPerMeter);
+    fixDef.shape.SetAsBox(5 / pxPerMeter, 5 / pxPerMeter);
 
-    this.world.CreateBody(bodyDef).CreateFixture(fixDef);
+    var body = this.world.CreateBody(bodyDef);
+    body.CreateFixture(fixDef);
 
-    bodyDef.type = b2Body.b2_dynamicBody;
-    bodyDef.position.x = 200 / pxPerMeter;
-    bodyDef.position.y = 100 / pxPerMeter;
+    bodyDef.type = b2Body.b2_staticBody;
+    bodyDef.position.x = (hoopX + 45) / pxPerMeter;
+    bodyDef.position.y = hoopY / pxPerMeter;
+    bodyDef.angle = 0;
 
-    this.world.CreateBody(bodyDef).CreateFixture(fixDef);
-    // end of temporary code
+    fixDef.shape = new b2PolygonShape();
+    fixDef.shape.SetAsBox(5 / pxPerMeter, 5 / pxPerMeter);
+
+    body = this.world.CreateBody(bodyDef);
+    body.CreateFixture(fixDef);
+
+    // hoop board dimension: 10x80 (5x40 in half value)
+    bodyDef.type = b2Body.b2_staticBody;
+    bodyDef.position.x = (hoopX - 5) / pxPerMeter;
+    bodyDef.position.y = (hoopY - 40) / pxPerMeter;
+    bodyDef.angle = 0;
+
+    fixDef.shape = new b2PolygonShape();
+    fixDef.shape.SetAsBox(5 / pxPerMeter, 40 / pxPerMeter);
+    fixDef.restitution = 0.05;
+
+    var board = this.world.CreateBody(bodyDef);
+    board.CreateFixture(fixDef);
+  };
+
+  physics.spawnBall = function () {
+    var positionX = 300;
+    var positionY = 200;
+    var radius = 13;
+
+    var bodyDef = new b2BodyDef();
+
+    var fixDef = new b2FixtureDef();
+    fixDef.density = 0.6;
+    fixDef.friction = 0.8;
+    fixDef.restitution = 0.1;
+
+    bodyDef.type = b2Body.b2_staticBody;
+
+    bodyDef.position.x = positionX / pxPerMeter;
+    bodyDef.position.y = positionY / pxPerMeter;
+
+    fixDef.shape = new b2CircleShape(radius / pxPerMeter);
+
+    this.ball = this.world.CreateBody(bodyDef);
+    this.ball.CreateFixture(fixDef);
+  };
+
+  physics.ballPosition = function () {
+    var pos = this.ball.GetPosition();
+    return {
+      x: pos.x * pxPerMeter,
+      y: pos.y * pxPerMeter,
+    };
+  };
+
+  physics.launchAngle = function (stageX, stageY) {
+    var ballPos = this.ballPosition();
+
+    var diffX = stageX - ballPos.x;
+    var diffY = stageY - ballPos.y;
+
+    // Quadrant
+    var degreeAddition = 0; // Quadrant I
+    if (diffX < 0 && diffY > 0) {
+      degreeAddition = Math.PI; // Quadrant II
+    } else if (diffX < 0 && diffY < 0) {
+      degreeAddition = Math.PI; // Quadrant III
+    } else if (diffX > 0 && diffY < 0) {
+      degreeAddition = Math.PI * 2; // Quadrant IV
+    }
+
+    var theta = Math.atan(diffY / diffX) + degreeAddition;
+    return theta;
+  };
+
+  physics.shootBall = function (stageX, stageY, ticksDiff) {
+    this.ball.SetType(b2Body.b2_dynamicBody);
+
+    var theta = this.launchAngle(stageX, stageY);
+
+    var r = Math.log(ticksDiff) * 50; // power
+
+    var resultX = r * Math.cos(theta);
+    var resultY = r * Math.sin(theta);
+
+    this.ball.ApplyTorque(30); // rotate it
+
+    // shoot the ball
+    this.ball.ApplyImpulse(
+      new b2Vec2(resultX / pxPerMeter, resultY / pxPerMeter),
+      this.ball.GetWorldCenter(),
+    );
+
+    this.ball = undefined;
   };
 
   physics.update = function () {

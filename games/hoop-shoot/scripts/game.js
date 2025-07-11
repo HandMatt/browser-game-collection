@@ -16,6 +16,36 @@ var images = images || {};
 
     game.physics.createWorld();
     game.physics.showDebugDraw();
+
+    game.physics.createLevel();
+
+    isPlaying = true;
+
+    game.tickWhenDown = 0;
+    game.tickWhenUp = 0;
+
+    game.stage.on("stagemousedown", function (e) {
+      if (!isPlaying) {
+        return;
+      }
+      game.tickWhenDown = cjs.Ticker.getTicks();
+    });
+
+    game.stage.on("stagemouseup", function (e) {
+      if (!isPlaying) {
+        return;
+      }
+      game.tickWhenUp = cjs.Ticker.getTicks();
+      ticksDiff = game.tickWhenUp - game.tickWhenDown;
+
+      game.physics.shootBall(e.stageX, e.stageY, ticksDiff);
+
+      setTimeout(game.spawnBall, 500);
+    });
+  };
+
+  game.spawnBall = function () {
+    game.physics.spawnBall();
   };
 
   game.tick = function () {
