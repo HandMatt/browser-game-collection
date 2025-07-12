@@ -71,7 +71,7 @@ var Box2D = Box2D || {};
     fixDef.restitution = 0.2;
 
     // obstacles
-    var body;
+    var body, sprites;
     for (var i = 0, len = level.obstacles.length; i < len; i++) {
       var o = level.obstacles[i];
 
@@ -80,10 +80,20 @@ var Box2D = Box2D || {};
       bodyDef.position.y = o.position.y / pxPerMeter;
 
       bodyDef.angle = o.angle;
+
+      if (o.type === "rect") {
+        fixDef.shape = new b2PolygonShape();
+        fixDef.shape.SetAsBox(
+          o.dimension.width / pxPerMeter,
+          o.dimension.height / pxPerMeter,
+        );
+        body = this.world.CreateBody(bodyDef);
+        body.CreateFixture(fixDef);
+      }
     }
   };
 
-  physics.createHoop = function () {
+  physics.createHoop = function (level) {
     var hoopX = level.hoopPosition.x;
     var hoopY = level.hoopPosition.y;
 
@@ -192,16 +202,19 @@ var Box2D = Box2D || {};
       level.ballRandomRange.y / 2;
     var radius = ball.radius;
 
+    var bodyDef = new b2BodyDef();
+
     var fixDef = new b2FixtureDef();
     fixDef.density = ball.density;
     fixDef.friction = ball.friction;
     fixDef.restitution = ball.restitution;
-    fixDef.shape = new b2CircleShape(radius / pxPerMeter);
 
-    var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_staticBody;
+
     bodyDef.position.x = positionX / pxPerMeter;
     bodyDef.position.y = positionY / pxPerMeter;
+
+    fixDef.shape = new b2CircleShape(radius / pxPerMeter);
 
     this.ball = this.world.CreateBody(bodyDef);
     this.ball.CreateFixture(fixDef);
