@@ -31,7 +31,10 @@ var Box2D = Box2D || {};
   };
 
   physics.createLevel = function () {
-    this.createHoop();
+    var level = game.currentLevel;
+    this.createObstacles(level);
+    this.createHoop(level);
+
     this.createWorldBoundary();
 
     this.setupContactListener();
@@ -58,9 +61,31 @@ var Box2D = Box2D || {};
     body.SetUserData({ isBoundary: true }); // distinguish this object from others
   };
 
+  physics.createObstacles = function (level) {
+    var bodyDef = new b2BodyDef();
+    var fixDef = new b2FixtureDef();
+
+    // default fixture
+    fixDef.density = 1.0;
+    fixDef.friction = 0.5;
+    fixDef.restitution = 0.2;
+
+    // obstacles
+    var body;
+    for (var i = 0, len = level.obstacles.length; i < len; i++) {
+      var o = level.obstacles[i];
+
+      bodyDef.type = b2Body.b2_staticBody;
+      bodyDef.position.x = o.position.x / pxPerMeter;
+      bodyDef.position.y = o.position.y / pxPerMeter;
+
+      bodyDef.angle = o.angle;
+    }
+  };
+
   physics.createHoop = function () {
-    var hoopX = 50;
-    var hoopY = 100;
+    var hoopX = level.hoopPosition.x;
+    var hoopY = level.hoopPosition.y;
 
     var bodyDef = new b2BodyDef();
     var fixDef = new b2FixtureDef();
@@ -154,23 +179,29 @@ var Box2D = Box2D || {};
   };
 
   physics.spawnBall = function () {
-    var positionX = 300;
-    var positionY = 200;
-    var radius = 13;
+    var level = game.currentLevel;
+    var ball = game.balls[level.ballName];
 
-    var bodyDef = new b2BodyDef();
+    var positionX =
+      level.ballPosition.x +
+      Math.random() * level.ballRandomRange.x -
+      level.ballRandomRange.x / 2;
+    var positionY =
+      level.ballPosition.y +
+      Math.random() * level.ballRandomRange.y -
+      level.ballRandomRange.y / 2;
+    var radius = ball.radius;
 
     var fixDef = new b2FixtureDef();
-    fixDef.density = 0.6;
-    fixDef.friction = 0.8;
-    fixDef.restitution = 0.1;
+    fixDef.density = ball.density;
+    fixDef.friction = ball.friction;
+    fixDef.restitution = ball.restitution;
+    fixDef.shape = new b2CircleShape(radius / pxPerMeter);
 
+    var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_staticBody;
-
     bodyDef.position.x = positionX / pxPerMeter;
     bodyDef.position.y = positionY / pxPerMeter;
-
-    fixDef.shape = new b2CircleShape(radius / pxPerMeter);
 
     this.ball = this.world.CreateBody(bodyDef);
     this.ball.CreateFixture(fixDef);
