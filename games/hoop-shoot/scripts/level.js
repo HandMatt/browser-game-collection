@@ -1,8 +1,6 @@
 var game = this.game || (this.game = {});
 
 (function (game) {
-  var degrees = Math.PI / 180;
-
   game.balls = {
     "slow ball": {
       className: "SlowBall",
@@ -66,4 +64,4 @@ var game = this.game || (this.game = {});
     },
   ];
   game.currentLevel = game.levels[0]; // default the 1st level.
-}).call(this.game);
+}).call(this, game);
