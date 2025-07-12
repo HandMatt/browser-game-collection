@@ -16,6 +16,7 @@ var images = images || {};
 
     game.physics.createWorld();
     game.physics.showDebugDraw();
+    game.view.initPowerIndicator();
 
     game.physics.createLevel();
 
@@ -29,13 +30,27 @@ var images = images || {};
       if (!isPlaying) {
         return;
       }
-      game.tickWhenDown = cjs.Ticker.getTicks();
-    });
+      var position = game.physics.ballPosition();
+      game.view.showPowerIndicator(position.x, position.y);
 
+      var rotation = game.physics.launchAngle(e.stageX, e.stageY);
+      game.view.rotatePowerIndicator((rotation * 180) / Math.PI); // convert to degree
+
+      game.tickWhenDown = cjs.Ticker.getTicks();
+      game.view.updatePowerBar(0);
+    });
+    game.stage.on("stagemousemove", function (e) {
+      if (!isPlaying) {
+        return;
+      }
+      var rotation = game.physics.launchAngle(e.stageX, e.stageY);
+      game.view.rotatePowerIndicator((rotation * 180) / Math.PI); // convert to degree
+    });
     game.stage.on("stagemouseup", function (e) {
       if (!isPlaying) {
         return;
       }
+      game.view.hidePowerIndicator();
       game.tickWhenUp = cjs.Ticker.getTicks();
       ticksDiff = game.tickWhenUp - game.tickWhenDown;
 
@@ -60,6 +75,10 @@ var images = images || {};
     } // run whan not paused
 
     game.physics.update();
+
+    // launch power preview
+    var ticksDiff = cjs.Ticker.getTicks() - game.tickWhenDown;
+    game.view.updatePowerBar(ticksDiff);
   };
 
   game.start();

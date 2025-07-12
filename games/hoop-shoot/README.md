@@ -20,11 +20,11 @@ http://localhost:8000
 
 ## Development TODO
 
-- [ ] create simulated physics world
-- [ ] shooting a ball
-- [ ] handling collision detection
-- [ ] defining levels
-- [ ] launching a bar with power
+- [x] create simulated physics world
+- [x] shooting a ball
+- [x] handling collision detection
+- [x] defining levels
+- [x] launch bar with power indicator
 - [ ] adding a cross obstacle
 - [ ] visualising graphics
 - [ ] choosing a level
