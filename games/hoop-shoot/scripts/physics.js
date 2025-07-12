@@ -89,8 +89,54 @@ var Box2D = Box2D || {};
         );
         body = this.world.CreateBody(bodyDef);
         body.CreateFixture(fixDef);
+      } else if (o.type === "cross") {
+        this.createCross(o);
       }
     }
+  };
+
+  physics.createCross = function (obstacle) {
+    console.log("Creating cross");
+    var bodyDef = new b2BodyDef();
+    var fixDef = new b2FixtureDef();
+
+    // default fixture
+    fixDef.density = 0.2;
+    fixDef.friction = 0.5;
+    fixDef.restitution = 0.2;
+
+    bodyDef.type = b2Body.b2_dynamicBody;
+    bodyDef.position.x = obstacle.position.x / pxPerMeter;
+    bodyDef.position.y = obstacle.position.y / pxPerMeter;
+    fixDef.shape = new b2PolygonShape();
+    fixDef.shape.SetAsBox(
+      obstacle.length / pxPerMeter,
+      obstacle.width / pxPerMeter,
+    );
+    var cross = this.world.CreateBody(bodyDef);
+    cross.CreateFixture(fixDef);
+    fixDef.shape.SetAsBox(
+      obstacle.width / pxPerMeter,
+      obstacle.length / pxPerMeter,
+    );
+    cross.CreateFixture(fixDef);
+
+    // a circle as the spinning joint
+    bodyDef.type = b2Body.b2_staticBody;
+    fixDef.shape = new b2CircleShape(10 / pxPerMeter);
+    var circle = this.world.CreateBody(bodyDef);
+    circle.CreateFixture(fixDef);
+
+    var revoluteJointDef = new b2RevoluteJointDef();
+    revoluteJointDef.bodyA = cross;
+    revoluteJointDef.bodyB = circle;
+    revoluteJointDef.collideConnected = false;
+
+    revoluteJointDef.maxMotorTorque = obstacle.maxTorque;
+    revoluteJointDef.motorSpeed = obstacle.motorSpeed;
+    revoluteJointDef.enableMotor = obstacle.enableMotor;
+
+    this.world.CreateJoint(revoluteJointDef);
   };
 
   physics.createHoop = function (level) {
