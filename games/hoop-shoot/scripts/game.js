@@ -3,6 +3,17 @@ var createjs = createjs || {};
 var images = images || {};
 
 (function (game, cjs) {
+  game.load = function () {
+    // load bitmap assets before starting the game
+    var loader = new createjs.LoadQueue(false);
+    loader.addEventListener("fileload", function (e) {
+      if (e.item.type === "image") {
+        images[e.item.id] = e.result;
+      } // assign to images object for assets.js to use
+    });
+    loader.addEventListener("complete", game.start);
+    loader.loadManifest(lib.properties.manifest);
+  };
   game.start = function () {
     cjs.EventDispatcher.initialize(game); // allow the game object to listen and dispatch custom events.
 
@@ -15,15 +26,42 @@ var images = images || {};
     cjs.Ticker.addEventListener("tick", game.tick); // gameloop
 
     game.physics.createWorld();
-    game.physics.showDebugDraw();
+    // game.physics.showDebugDraw();
     game.view.initPowerIndicator();
 
-    game.physics.createLevel();
+    // level selection
+    var levelSelection = new lib.LevelSelection();
+    game.stage.addChild(levelSelection);
+    levelSelection.levels.stop();
 
-    game.score = 0;
+    levelSelection.rightButton.on("click", function () {
+      var next = levelSelection.levels.currentFrame + 1;
+      levelSelection.levels.gotoAndStop(next);
+    });
+    levelSelection.leftButton.on("click", function () {
+      var prev = levelSelection.levels.currentFrame - 1;
+      levelSelection.levels.gotoAndStop(prev);
+    });
 
-    isPlaying = true;
+    // start the game play
+    var isPlaying = false;
+    levelSelection.playButton.on("click", function () {
+      levelSelection.parent.removeChild(levelSelection);
 
+      // game.physics.showDebugDraw();
+
+      game.score = 0;
+
+      game.currentLevel = game.levels[levelSelection.levels.currentFrame];
+
+      game.physics.createLevel();
+
+      game.view.showScoreBoard();
+
+      isPlaying = true;
+    });
+
+    // shooting indicator
     game.tickWhenDown = 0;
     game.tickWhenUp = 0;
     game.stage.on("stagemousedown", function (e) {
@@ -66,7 +104,8 @@ var images = images || {};
 
   game.increaseScore = function () {
     game.score += 1;
-    console.log(game.score); // out to console untill we display it in interface.
+    game.view.updateScore();
+    // console.log(game.score);
   };
 
   game.tick = function () {
@@ -81,5 +120,5 @@ var images = images || {};
     game.view.updatePowerBar(ticksDiff);
   };
 
-  game.start();
+  game.load();
 }).call(this, game, createjs);

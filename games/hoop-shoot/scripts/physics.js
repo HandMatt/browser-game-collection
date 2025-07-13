@@ -30,6 +30,19 @@ var Box2D = Box2D || {};
     this.world = new b2World(gravity, /*allow sleep= */ true);
   };
 
+  physics.clearWorld = function () {
+    var body = this.world.GetBodyList();
+    while (body) {
+      var sprite = body.GetUserData();
+      if (sprite) {
+        sprite.parent.removeChild(sprite);
+      }
+      var b = body;
+      body = body.GetNext();
+      this.world.DestroyBody(b);
+    }
+  };
+
   physics.createLevel = function () {
     var level = game.currentLevel;
     this.createObstacles(level);

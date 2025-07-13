@@ -1,6 +1,8 @@
 var game = this.game || (this.game = {});
 
 (function (game) {
+  var degrees = Math.PI / 180;
+
   game.balls = {
     "slow ball": {
       className: "SlowBall",
@@ -27,18 +29,17 @@ var game = this.game || (this.game = {});
     },
     {
       hoopPosition: { x: 50, y: 200 },
+      ballName: "slow ball",
+      ballPosition: { x: 350, y: 200 },
+      ballRandomRange: { x: 160, y: 0 },
+      obstacles: [],
+    },
+    {
+      hoopPosition: { x: 50, y: 160 },
       ballName: "bouncy ball",
-      ballPosition: { x: 300, y: 250 },
+      ballPosition: { x: 350, y: 250 },
       ballRandomRange: { x: 80, y: 80 },
-      obstacles: [
-        {
-          type: "rect",
-          graphicName: "BrownSquare",
-          position: { x: 150, y: 160 },
-          dimension: { width: 10, height: 10 },
-          angle: 45,
-        },
-      ],
+      obstacles: [],
     },
     {
       hoopPosition: { x: 50, y: 160 },
