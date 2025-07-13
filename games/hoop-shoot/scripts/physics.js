@@ -89,6 +89,8 @@ var Box2D = Box2D || {};
         );
         body = this.world.CreateBody(bodyDef);
         body.CreateFixture(fixDef);
+
+        game.view.addSpriteToBody(body, o.graphicName);
       } else if (o.type === "cross") {
         this.createCross(o);
       }
@@ -96,7 +98,6 @@ var Box2D = Box2D || {};
   };
 
   physics.createCross = function (obstacle) {
-    console.log("Creating cross");
     var bodyDef = new b2BodyDef();
     var fixDef = new b2FixtureDef();
 
@@ -120,6 +121,8 @@ var Box2D = Box2D || {};
       obstacle.length / pxPerMeter,
     );
     cross.CreateFixture(fixDef);
+
+    game.view.addSpriteToBody(cross, obstacle.graphicName);
 
     // a circle as the spinning joint
     bodyDef.type = b2Body.b2_staticBody;
@@ -163,6 +166,8 @@ var Box2D = Box2D || {};
     var body = this.world.CreateBody(bodyDef);
     body.CreateFixture(fixDef);
 
+    game.view.addSpriteToBody(body, "HoopSquare");
+
     bodyDef.type = b2Body.b2_staticBody;
     bodyDef.position.x = (hoopX + 45) / pxPerMeter;
     bodyDef.position.y = hoopY / pxPerMeter;
@@ -173,6 +178,8 @@ var Box2D = Box2D || {};
 
     body = this.world.CreateBody(bodyDef);
     body.CreateFixture(fixDef);
+
+    game.view.addSpriteToBody(body, "HoopSquare");
 
     // hoop board dimension: 10x80 (5x40 in half value)
     bodyDef.type = b2Body.b2_staticBody;
@@ -187,6 +194,8 @@ var Box2D = Box2D || {};
     var board = this.world.CreateBody(bodyDef);
     board.CreateFixture(fixDef);
 
+    game.view.addSpriteToBody(board, "HoopBoard");
+
     // hoop sensor
     bodyDef.type = b2Body.b2_staticBody;
     bodyDef.position.x = (hoopX + 20) / pxPerMeter;
@@ -199,6 +208,8 @@ var Box2D = Box2D || {};
 
     body = this.world.CreateBody(bodyDef);
     body.CreateFixture(fixDef);
+
+    game.view.addSpriteToBody(body, "HoopSensor", 0);
   };
 
   physics.setupContactListener = function () {
@@ -264,6 +275,8 @@ var Box2D = Box2D || {};
 
     this.ball = this.world.CreateBody(bodyDef);
     this.ball.CreateFixture(fixDef);
+
+    game.view.addSpriteToBody(this.ball, ball.className);
   };
 
   physics.ballPosition = function () {
@@ -321,6 +334,21 @@ var Box2D = Box2D || {};
       this.world.DrawDebugData();
     }
     this.world.ClearForces();
+
+    // draw sprites
+    var body = this.world.GetBodyList();
+    while (body) {
+      var sprite = body.GetUserData();
+
+      if (sprite) {
+        var position = body.GetWorldCenter();
+        sprite.x = position.x * pxPerMeter;
+        sprite.y = position.y * pxPerMeter;
+        sprite.rotation = (body.GetAngle() * 180) / Math.PI; // rad to degree
+      }
+
+      body = body.GetNext();
+    }
 
     // remove bodies
     for (var i = 0, len = this.bodiesToRemove.length; i < len; i++) {

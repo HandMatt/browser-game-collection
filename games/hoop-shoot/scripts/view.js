@@ -23,4 +23,14 @@ var createjs = createjs || {};
   game.view.updatePowerBar = function (value) {
     this.power.powerBar.scaleY = Math.min(30, value); // maximum 30 scaleY
   };
+  game.view.addSpriteToBody = function (body, spriteName, index) {
+    var sprite = new lib[spriteName]();
+    sprite.x = -99;
+    if (index !== undefined) {
+      game.stage.addChildAt(sprite, index);
+    } else {
+      game.stage.addChild(sprite);
+    }
+    body.SetUserData(sprite);
+  };
 }).call(this, game, createjs);
