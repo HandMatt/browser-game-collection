@@ -1,0 +1,178 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+p,
+h1,
+h2,
+h3 {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Main layout */
+/* By default, the game is 100% width and the recipes is at the bottom of the game */
+#game {
+  width: 100%;
+  float: left;
+}
+#recipes {
+  float: right;
+  width: 100%;
+  background: #acacac;
+}
+
+/* layout inside game */
+/* from top to bottom: status, customer view, sushi */
+#status-bar {
+  background: #d8d8d8;
+  border-bottom: 1px solid #979797;
+  width: 100%;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+}
+
+#customer-view {
+  background: url(../images/stand-background.png) center center no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 300px;
+}
+
+#sushi-area {
+  background: #9d7335;
+  width: 100%;
+  height: 250px;
+}
+
+/* sushi-board and ingredients are inside sushi area */
+/* sushi-board on the right of ingredients buttons */
+#sushi-board {
+  background: #913030;
+  border: 1px solid #979797;
+  width: 50%;
+  height: 100%;
+  float: right;
+}
+
+/* ingredients buttons on the left of sushi board */
+#ingredients {
+  height: 100%;
+  width: 50%;
+  float: left;
+  padding: 10px;
+  overflow: auto;
+}
+
+/* individual ingredient inside the ingredients section */
+.ingredient {
+  width: 33%;
+  height: 35%;
+  background: #d8d8d8;
+  border: 1px solid #979797;
+  float: left;
+}
+
+/* phone button after the individual ingredient */
+#phone {
+  width: 99%;
+  height: 30%;
+  background: #d8d8d8 url(../images/refill-phone.png) center center no-repeat;
+  float: left;
+}
+
+/* mobile portrait view */
+@media screen and (max-width: 500px) {
+  #customer-view {
+    height: 250px;
+  }
+  #ingredients {
+    width: 70%;
+  }
+  #sushi-board {
+    width: 30%;
+  }
+}
+
+/* mobile landscape view */
+@media screen and (max-device-width: 550px) and (orientation: landscape) {
+  #status-bar {
+    float: left;
+    width: auto;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-right: 1px solid #979797;
+  }
+  #customer-view {
+    /* reduce the height of customer view */
+    height: 130px;
+  }
+
+  #sushi-area {
+    /* reduce the height of sushi area */
+    height: 200px;
+  }
+}
+
+/* wide screen */
+@media screen and (min-width: 800px) {
+  #game {
+    width: 60%;
+  }
+  #recipes {
+    width: 40%;
+  }
+}
+
+/* Ingredient */
+.ingredient {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.ingredient[data-type="rice"] {
+  background-image: url(../images/rice.png);
+  max-width: auto;
+}
+.ingredient[data-type="egg"] {
+  background-image: url(../images/egg.png);
+}
+.ingredient[data-type="octopus"] {
+  background-image: url(../images/octopus.png);
+}
+.ingredient[data-type="salmon"] {
+  background-image: url(../images/salmon.png);
+}
+.ingredient[data-type="salmon-roe"] {
+  background-image: url(../images/salmon-roe.png);
+}
+.ingredient[data-type="seaweed"] {
+  background-image: url(../images/seaweed.png);
+}
+
+/* Sushi */
+.sushi {
+  width: 100%;
+  min-height: 100px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.sushiSalmonRoe {
+  background-image: url(../images/sushiSalmonRoe.png);
+}
+.sushiSalmon {
+  background-image: url(../images/sushiSalmon.png);
+}
+.sushiEgg {
+  background-image: url(../images/sushiEgg.png);
+}
+.sushiOctopus {
+  background-image: url(../images/sushiOctopus.png);
+}

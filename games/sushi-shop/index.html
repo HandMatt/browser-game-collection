@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimal-ui"
+    />
+    <title>Sushi Shop</title>
+    <link rel="stylesheet" href="styles/game.css" />
+  </head>
+
+  <body>
+    <div id="game">
+      <div id="status-bar">$23,000</div>
+      <div id="customer-view">
+        <canvas id="canvas" width="100" height="100"> </canvas>
+      </div>
+
+      <div id="sushi-area">
+        <div id="ingredients">
+          <div class="ingredient" data-type="rice">10</div>
+          <div class="ingredient" data-type="octopus">10</div>
+          <div class="ingredient" data-type="salmon">10</div>
+          <div class="ingredient" data-type="salmon-roe">10</div>
+          <div class="ingredient" data-type="seaweed">10</div>
+          <div class="ingredient" data-type="egg">10</div>
+          <div id="phone"></div>
+        </div>
+        <div id="sushi-board">
+          <a id="delete-sushi-btn"></a>
+          <div id="others"></div>
+          <div id="rices"></div>
+          <div id="seaweeds"></div>
+        </div>
+      </div>
+    </div>
+    <div id="recipes">
+      <h1>Sushi Recipes</h1>
+      <p><img src="images/recipe.png" alt="recipe" /></p>
+    </div>
+    <div id="help">
+      <h2>About this game</h2>
+
+      <h2>How to Play</h2>
+      <p>Select ingredients based on the recipes.</p>
+      <p>Click on customer to serve the dish to him.</p>
+    </div>
+
+    <!-- Having all the JavaScripts separated here for readability. Please merge them into one file in production. -->
+    <script src="vendors/easeljs.min.js"></script>
+    <script src="vendors/tweenjs.min.js"></script>
+    <script src="vendors/preloadjs.min.js"></script>
+    <script src="scripts/assets.js"></script>
+    <script src="scripts/helpers.js"></script>
+    <script src="scripts/view.js"></script>
+    <script src="scripts/data.js"></script>
+    <script src="scripts/customer.js"></script>
+    <script src="scripts/game.js"></script>
+  </body>
+</html>
