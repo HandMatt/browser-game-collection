@@ -43,6 +43,9 @@ img {
   background-size: cover;
   width: 100%;
   height: 300px;
+  border-style: solid;
+  border-width: 26px 32px 42px 32px;
+  border-image: url(../images/sushi-stand-border.png) 26 32 42 32 repeat;
 }
 
 #sushi-area {
@@ -84,7 +87,16 @@ img {
   width: 99%;
   height: 30%;
   background: #d8d8d8 url(../images/refill-phone.png) center center no-repeat;
+  background-size: contain;
   float: left;
+}
+
+#delete-sushi-btn {
+  display: block;
+  width: 100px;
+  height: 30px;
+  background: url(../images/trash.png) center center no-repeat;
+  background-size: contain;
 }
 
 /* mobile portrait view */
@@ -138,7 +150,6 @@ img {
 }
 .ingredient[data-type="rice"] {
   background-image: url(../images/rice.png);
-  max-width: auto;
 }
 .ingredient[data-type="egg"] {
   background-image: url(../images/egg.png);
