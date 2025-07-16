@@ -62,6 +62,10 @@ img {
   width: 50%;
   height: 100%;
   float: right;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  padding: 10px;
 }
 
 /* ingredients buttons on the left of sushi board */
@@ -97,6 +101,7 @@ img {
   height: 30px;
   background: url(../images/trash.png) center center no-repeat;
   background-size: contain;
+  flex-basis: 100%; /* Makes it take full width, forcing new line */
 }
 
 /* mobile portrait view */
@@ -148,6 +153,22 @@ img {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+/* Ingredients in the sushi board need explicit height */
+#sushi-board .ingredient {
+  width: 33%;
+  height: 28%;
+  flex-shrink: 0;
+}
+
+/* Container for ingredients in sushi board */
+#sushi-board #others,
+#sushi-board #rices,
+#sushi-board #seaweeds {
+  display: contents; /* Makes the divs transparent to flex layout */
+}
+
+/* Make the sushi board container handle the wrapping */
 .ingredient[data-type="rice"] {
   background-image: url(../images/rice.png);
 }
