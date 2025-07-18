@@ -23,6 +23,22 @@ var createjs = createjs || {};
   function initCustomerView() {
     // Canvas
     game.canvas = document.getElementById("canvas");
+
+    game.stage = new cjs.Stage(game.canvas);
+    cjs.Touch.enable(
+      game.stage,
+      /*single touch=*/ true,
+      /*allow default=*/ true,
+    );
+
+    cjs.Ticker.setFPS(60);
+    cjs.Ticker.addEventListener("tick", game.stage); // add game.stage to ticker to make the stage.update call automatically.
+
+    game.view.queueLeft = new cjs.Container();
+    game.stage.addChild(game.view.queueLeft);
+
+    game.view.queueRight = new cjs.Container();
+    game.stage.addChild(game.view.queueRight);
   }
 
   function initDOMElements() {
@@ -45,27 +61,12 @@ var createjs = createjs || {};
     var getBorderWidths = function (element) {
       // get computed style.
       var style = getComputedStyle(element);
-      var borderWidths = style.borderWidth.split(" ");
-
-      var top, right, bottom, left;
-      top = right = bottom = left = parseInt(borderWidths[0]);
-
-      if (borderWidths.length >= 2) {
-        right = left = parseInt(borderWidths[1]);
-      }
-      if (borderWidths.length >= 3) {
-        bottom = parseInt(borderWidths[2]);
-      }
-      if (borderWidths.length >= 4) {
-        left = parseInt(borderWidths[3]);
-      }
-
       // return the 4 values as object.
       return {
-        top: top,
-        right: right,
-        bottom: bottom,
-        left: left,
+        top: parseInt(style.borderTopWidth),
+        right: parseInt(style.borderRightWidth),
+        bottom: parseInt(style.borderBottomWidth),
+        left: parseInt(style.borderLeftWidth),
       };
     };
 
@@ -77,17 +78,23 @@ var createjs = createjs || {};
         customerView.offsetHeight - borderWidths.top - borderWidths.bottom; // border-width of top + bottom
     };
 
-    resizeCanvas();
-    repositionCustomer();
+    // 0.35 and 0.8 positions shows both queues in better spacing.
+    var leftPos = 0.35;
+    var rightPos = 0.8;
+    function repositionCustomer() {
+      game.view.queueLeft.x = game.canvas.width * leftPos;
+      game.view.queueLeft.y = game.canvas.height;
+      game.view.queueRight.x = game.canvas.width * rightPos;
+      game.view.queueRight.y = game.canvas.height;
+    }
 
     window.onresize = function () {
       resizeCanvas();
       repositionCustomer();
     };
 
-    function repositionCustomer() {
-      // code later for canvas resizing
-    }
+    resizeCanvas();
+    repositionCustomer();
   }
 
   // logic of clicking the ingredients
@@ -100,12 +107,12 @@ var createjs = createjs || {};
   var addIngredientToScreen = function (type) {
     var isEqualToAnySushi = false;
     var sushiName = "";
-    // loop all receipes
-    for (var key in game.receipes) {
-      if (game.receipes.hasOwnProperty(key)) {
+    // loop all recipes
+    for (var key in game.recipes) {
+      if (game.recipes.hasOwnProperty(key)) {
         isEqualToAnySushi = game.helper.arrayIsEqual(
           game.sushiOnHand,
-          game.receipes[key],
+          game.recipes[key],
         );
         sushiName = key;
         if (isEqualToAnySushi) {
