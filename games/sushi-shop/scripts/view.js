@@ -16,9 +16,20 @@ var createjs = createjs || {};
     game.helper.clearChildren(seaweeds);
   };
 
-  // ------ view's internal logic starts here
-
+  // individual ingredient node
   var ingredientsNode = document.getElementById("ingredients");
+  game.view.refreshAmount = function (type) {
+    ingredientsNode.querySelector(
+      ".ingredient[data-type=" + type + "]",
+    ).textContent = game.amount[type];
+  };
+
+  var cashNode = document.getElementById("status-bar");
+  game.view.refreshCash = function () {
+    cashNode.textContent = "$" + game.cash;
+  };
+
+  // ------ view's internal logic starts here
 
   function initCustomerView() {
     // Canvas
@@ -31,7 +42,7 @@ var createjs = createjs || {};
       /*allow default=*/ true,
     );
 
-    cjs.Ticker.setFPS(60);
+    cjs.Ticker.framerate = 60;
     cjs.Ticker.addEventListener("tick", game.stage); // add game.stage to ticker to make the stage.update call automatically.
 
     game.view.queueLeft = new cjs.Container();
@@ -52,6 +63,17 @@ var createjs = createjs || {};
     var deleteButton = document.getElementById("delete-sushi-btn");
     deleteButton.onclick = function () {
       game.trashSushi();
+    };
+
+    // phone call to refill ingredients
+    var phoneBtn = document.getElementById("phone");
+    phoneBtn.onclick = function () {
+      var needCash = 600;
+      if (game.cash >= needCash) {
+        game.increaseAmount();
+        game.cash -= needCash;
+        game.view.refreshCash();
+      }
     };
   }
 
@@ -147,6 +169,14 @@ var createjs = createjs || {};
 
   var ingredientOnClick = function () {
     var type = this.dataset.type;
+
+    // reduce amount
+    if (game.amount[type] > 0) {
+      game.amount[type] -= 1;
+      game.view.refreshAmount(type);
+    } else {
+      return; // EXIT function if not enough amount
+    }
 
     // DATA
     game.sushiOnHand.push(type);

@@ -83,6 +83,8 @@ var lib = lib || {};
     );
     if (isEqual) {
       console.log("Yeah");
+      game.cash += 120;
+      game.view.refreshCash();
       this.hasEaten = true;
     } else {
       console.log("NOOOO");
