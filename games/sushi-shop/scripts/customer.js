@@ -86,6 +86,7 @@ var lib = lib || {};
       game.cash += 120;
       game.view.refreshCash();
       this.hasEaten = true;
+      cjs.Sound.play("earn-money");
     } else {
       console.log("NOOOO");
     }

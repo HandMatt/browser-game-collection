@@ -63,6 +63,7 @@ var createjs = createjs || {};
     var deleteButton = document.getElementById("delete-sushi-btn");
     deleteButton.onclick = function () {
       game.trashSushi();
+      cjs.Sound.play("button");
     };
 
     // phone call to refill ingredients
@@ -73,6 +74,7 @@ var createjs = createjs || {};
         game.increaseAmount();
         game.cash -= needCash;
         game.view.refreshCash();
+        cjs.Sound.play("refill");
       }
     };
   }
@@ -168,6 +170,8 @@ var createjs = createjs || {};
   };
 
   var ingredientOnClick = function () {
+    cjs.Sound.play("button");
+
     var type = this.dataset.type;
 
     // reduce amount

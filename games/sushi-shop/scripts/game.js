@@ -4,9 +4,28 @@ var lib = lib || {};
 
 // Main game logic
 (function (game, cjs, lib) {
+  game.load = function () {
+    // begin loading content (only sounds to load)
+    var assetsPath = "audio/";
+    manifest = [
+      { id: "button", src: "button.ogg" },
+      { id: "refill", src: "refill.ogg" },
+      { id: "earn-money", src: "earn-money.ogg" },
+      { id: "start-game", src: "start-game.ogg" },
+    ];
+
+    cjs.Sound.alternateExtensions = ["aif", "webm"];
+    preload = new cjs.LoadQueue(true, assetsPath);
+    preload.installPlugin(cjs.Sound);
+    preload.addEventListener("complete", game.start);
+    preload.loadManifest(manifest);
+  };
+
   game.start = function () {
     game.view.init();
     cjs.Ticker.addEventListener("tick", game.tick);
+
+    cjs.Sound.play("start-game");
   };
 
   game.tick = function () {
@@ -52,5 +71,5 @@ var lib = lib || {};
     game.view.clearAllIngredients();
   };
 
-  game.start();
+  game.load();
 }).call(this, game, createjs, lib);
