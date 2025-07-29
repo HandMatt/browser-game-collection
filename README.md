@@ -87,8 +87,8 @@ Each game is self-contained with its own HTML, CSS, and JavaScript files.
 - [x] ~~add .gitignore and remove .vscode from remote~~
 - [x] ~~add instructions for installing dependencies and ensuring git hooks run~~
 - [x] ~~complete 8 projects~~
-- [ ] ensure vendor resources are shared across the project
-- [ ] make use of templaces for common files .html and .css
+- [x] ~~ensure vendor resources are shared across the project~~
+- [ ] make use of templates for common files .html and .css
 - [x] ~~look into modern webgames, what libraries are being used?~~
   - [x] Phaser.js - seems to be the defacto for modern web based HTML games
   - [ ] ~~PixiJS~~

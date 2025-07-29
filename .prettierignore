@@ -1,3 +1,9 @@
 # Ignore artifacts:
 build
 coverage
+
+# Ignore vendor libraries and minified files
+**/vendors/**
+**/*.min.js
+**/*.min.css
+**/*.min.html

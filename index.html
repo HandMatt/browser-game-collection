@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browser Game Collection</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+      }
+
+      .game-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .game-card h3 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+      }
+
+      .game-card p {
+        color: #666;
+        line-height: 1.5;
+      }
+
+      .game-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border-radius: 10px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .footer {
+        text-align: center;
+        color: white;
+        opacity: 0.8;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🎮 Browser Game Collection</h1>
+        <p>A collection of HTML5 games built with CreateJS</p>
+      </div>
+
+      <div class="games-grid">
+        <a href="games/sushi-shop/" class="game-card">
+          <div class="game-icon">🍣</div>
+          <h3>Sushi Shop</h3>
+          <p>
+            Run your own sushi restaurant! Serve customers by creating delicious
+            sushi combinations based on recipes.
+          </p>
+        </a>
+
+        <a href="games/hoop-shoot/" class="game-card">
+          <div class="game-icon">🏀</div>
+          <h3>Hoop Shoot</h3>
+          <p>
+            Test your basketball skills! Shoot hoops with realistic physics and
+            challenging levels.
+          </p>
+        </a>
+
+        <a href="games/space-defenders/" class="game-card">
+          <div class="game-icon">🚀</div>
+          <h3>Space Defenders</h3>
+          <p>
+            Defend your space station from invading aliens in this action-packed
+            shooter game.
+          </p>
+        </a>
+
+        <a href="games/space-runner/" class="game-card">
+          <div class="game-icon">👾</div>
+          <h3>Space Runner</h3>
+          <p>
+            Navigate through space obstacles in this endless runner adventure.
+          </p>
+        </a>
+
+        <a href="games/card-battle/" class="game-card">
+          <div class="game-icon">🃏</div>
+          <h3>Card Battle</h3>
+          <p>
+            Strategic card-based combat game with unique abilities and tactics.
+          </p>
+        </a>
+
+        <a href="games/colour-quest/" class="game-card">
+          <div class="game-icon">🎨</div>
+          <h3>Colour Quest</h3>
+          <p>
+            Match colors and solve puzzles in this vibrant puzzle adventure.
+          </p>
+        </a>
+
+        <a href="games/isometric-city/" class="game-card">
+          <div class="game-icon">🏙️</div>
+          <h3>Isometric City</h3>
+          <p>
+            Build and manage your own isometric city with strategic planning.
+          </p>
+        </a>
+
+        <a href="games/multiply-defence/" class="game-card">
+          <div class="game-icon">⚔️</div>
+          <h3>Multiply Defence</h3>
+          <p>
+            Defend against waves of enemies using mathematical strategies and
+            tactics.
+          </p>
+        </a>
+      </div>
+
+      <div class="footer">
+        <p>Built with CreateJS • Future plans: Migration to Phaser</p>
+      </div>
+    </div>
+  </body>
+</html>
