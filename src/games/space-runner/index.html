@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Space Runner</title>
+    <link rel="stylesheet" href="styles/game.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="row">
+        <h1>Space Runner</h1>
+      </div>
+    </header>
+    <section id="game" class="row">
+      <div id="start-scene" class="scene out">
+        <a href="#" id="start-btn" class="button"></a>
+      </div>
+      <div id="game-scene" class="scene">
+        <div id="floor" class="floor">
+          <div id="player"></div>
+        </div>
+      </div>
+      <div id="gameover-scene" class="scene out">
+        <p><a href="#" id="back-to-menu-button" class="button"></a></p>
+      </div>
+    </section>
+    <section class="how-to-play row">
+      <h2>How to Play?</h2>
+      <p>Run as far away as possible without hitting any obstacles.</p>
+    </section>
+    <footer>
+      <div class="row">
+        <p>
+          This game is a modified example from the HTML5 Game Development
+          Hotshot book by Makzan. Free for personal and commerical use.
+        </p>
+      </div>
+    </footer>
+
+    <script src="scripts/patch.js"></script>
+    <script src="scripts/settings.js"></script>
+    <script src="scripts/player.js"></script>
+    <script src="scripts/runway.js"></script>
+    <script src="scripts/scenes.js"></script>
+    <script src="scripts/tile.js"></script>
+    <script src="scripts/game-scene.js"></script>
+    <script src="scripts/game.js"></script>
+  </body>
+</html>

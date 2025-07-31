@@ -1,0 +1,319 @@
+/* normalize */
+body {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  background: #26292c;
+}
+
+p {
+  margin: 0;
+  padding: 1em 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* page layout */
+.row {
+  width: 480px;
+  margin: 0 auto;
+}
+
+/* scenes */
+#game {
+  width: 480px;
+  height: 600px;
+  margin: 0 auto;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.scene {
+  background: #f9f9f9;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+}
+
+.scene.out {
+  transform: translate3d(100%, 0, 0);
+  -webkit-transform: translate3d(100%, 0, 0);
+}
+
+.scene.in {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+.hidden {
+  display: none;
+}
+
+.button {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+/* start scene */
+#start-scene {
+  background: url(images/start-scene-bg.png);
+}
+
+/* game scene */
+#game-scene {
+  background: url(images/battle-bg.png);
+}
+
+/* gameover scene */
+#gameover-scene.win {
+  background: url(images/you-win.png);
+}
+
+#gameover-scene.lose {
+  background: url(images/you-lose.png);
+}
+
+/* card */
+@keyframes shake {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  20% {
+    transform: translate3d(-5%, 0, 0);
+  }
+
+  40% {
+    transform: translate3d(5%, 0, 0);
+  }
+
+  60% {
+    transform: translate3d(-5%, 0, 0);
+  }
+
+  80% {
+    transform: translate3d(5%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.card {
+  width: 140px;
+  height: 180px;
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  perspective: 700;
+  -webkit-perspective: 700;
+  transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+}
+
+.card.a {
+  left: 15px;
+}
+
+.card.b {
+  left: 170px;
+}
+
+.card.c {
+  left: 325px;
+}
+
+.card.opponent {
+  bottom: 250px;
+}
+
+.card.opponent.out {
+  left: -200px;
+}
+
+.card.opponent.in {
+  transition-delay: 0.8s;
+  left: 40px;
+}
+
+.card.player.out {
+  transform: translate3d(0, 150%, 0);
+  -webkit-transform: translate3d(0, 150%, 0);
+}
+
+.card.player.in {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+.card.player.flipped {
+  /* indicate the card is clickable*/
+  cursor: pointer;
+}
+
+/* ensure only player, flipped and the just in card get this hover event */
+.card.player.in.flipped:hover {
+  transform: translate3d(0, -10px, 0);
+  -webkit-transform: translate3d(0, -10px, 0);
+}
+
+.card.selected {
+  bottom: 250px;
+  left: 300px;
+}
+
+.card.shake {
+  animation: shake 300ms ease-out;
+}
+
+/* card flipping related */
+.card > .face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+}
+
+.card > .face.front {
+  background: #81d1e9 url(images/front-face.png);
+  transform: rotate3d(0, 1, 0, 0deg);
+  -webkit-transform: rotate3d(0, 1, 0, 0deg);
+}
+
+.card > .face.back {
+  background: #4474b5 url(images/back-face-pattern.png);
+  transform: rotate3d(0, 1, 0, 180deg);
+  -webkit-transform: rotate3d(0, 1, 0, 180deg);
+  border: 3px solid white;
+}
+
+.card.flipped > .face.front {
+  transform: rotate3d(0, 1, 0, -180deg);
+  -webkit-transform: rotate3d(0, 1, 0, -180deg);
+}
+
+.card.flipped > .face.back {
+  transform: rotate3d(0, 1, 0, 0deg);
+  -webkit-transform: rotate3d(0, 1, 0, 0deg);
+}
+
+/* end flipping related */
+
+.card .power {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  bottom: 30px;
+  font-size: 2em;
+}
+
+.blaze {
+  position: absolute;
+  bottom: 300px;
+  width: 50px;
+  height: 50px;
+  opacity: 0;
+  animation-timing-function: ease-out;
+  animation-duration: 1000ms;
+}
+
+.blaze.toward-left {
+  background-image: url(images/blaze-left.png);
+}
+
+.blaze.toward-right {
+  background-image: url(images/blaze-right.png);
+}
+
+@keyframes blaze-toward-left {
+  0%,
+  20% {
+    opacity: 1;
+    transform: translate3d(300px, 0, 0);
+  }
+
+  80% {
+    transform: translate3d(100px, 0, 0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(100, 0, 0);
+  }
+}
+
+@keyframes blaze-toward-right {
+  0%,
+  20% {
+    opacity: 1;
+    transform: translate3d(130px, 0, 0);
+  }
+
+  80% {
+    transform: translate3d(330px, 0, 0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(330px, 0, 0);
+  }
+}
+
+.blaze.toward-left.attack {
+  animation-name: blaze-toward-left;
+}
+
+.blaze.toward-right.attack {
+  animation-name: blaze-toward-right;
+}
+
+/* Battle HUD */
+.battle-indicator {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: 0;
+  left: 200px;
+  background: url(images/battle.png);
+}
+
+.hp-background {
+  border-bottom: 1px solid #333;
+  background: #ababab;
+  height: 30px;
+}
+
+.hp {
+  position: absolute;
+  width: 210px;
+  height: 30px;
+  transition: all 0.3s ease-out;
+}
+
+.hp.opponent {
+  background: url(images/blue-hp.png) repeat;
+  left: 0;
+}
+
+.hp.player {
+  background: url(images/red-hp.png) repeat;
+  right: 0;
+}
