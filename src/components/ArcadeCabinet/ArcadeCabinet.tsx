@@ -12,7 +12,16 @@ const ArcadeCabinet: React.FC<ArcadeCabinetProps> = ({ children }) => {
         <div className="screen-area">
           <div className="screen">
             {children || (
-              <div className="welcome-screen">Welcome to the Arcade!</div>
+              <div className="welcome-screen">
+                <h1>Welcome to the Arcade!</h1>
+                <p>Select a game to play:</p>
+                <div className="game-list">
+                  <a href="/games/colour-quest" className="game-link">
+                    Colour Quest
+                  </a>
+                  {/* Add more game links as you migrate them */}
+                </div>
+              </div>
             )}
           </div>
         </div>

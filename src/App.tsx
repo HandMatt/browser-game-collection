@@ -1,9 +1,17 @@
-// Main ArcadeCabinet component
 import React from "react";
-import ArcadeCabinet from "./components/ArcadeCabinet";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import GameHub from "./components/GameHub";
+import GameRouter from "./components/GameRouter.tsx";
 
 function App() {
-  return <ArcadeCabinet />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<GameHub />} />
+        <Route path="/games/*" element={<GameRouter />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
